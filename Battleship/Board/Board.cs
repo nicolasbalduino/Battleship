@@ -3,8 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using Battleship.Board;
 
-namespace Battleship.Board
+namespace Battleship.GameBoard
 {
     internal class Board
     {
@@ -15,9 +16,14 @@ namespace Battleship.Board
             board = new Piece[lines, columns];
         }
 
-        public void PrintBoard ()
+        public void PrintBoard()
         {
-            Console.Write("   | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T |");
+            char[] letters = { 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
+            Console.Write("   | ");
+            for (int i = 0; i < board.GetLength(1); i++)
+            {
+                Console.Write(letters[i] + " | ");
+            }
             Console.Write("\n------------------------------------------------------------------------------------");
             for (int line = 0; line < board.GetLength(0); line++)
             {
@@ -32,6 +38,13 @@ namespace Battleship.Board
 
                 Console.Write("\n------------------------------------------------------------------------------------");
             }
+            Console.WriteLine();
+        }
+
+        public void InsertBoard(Piece piece, Position pos)
+        {
+            board[pos.Line, pos.Column] = piece;
         }
     }
 }
+
