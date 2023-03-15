@@ -11,7 +11,7 @@ namespace Battleship.Pieces
 
         public override string ToString()
         {
-            return "AC";
+            return "C";
         }
     }
 }

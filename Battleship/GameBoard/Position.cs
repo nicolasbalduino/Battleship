@@ -13,8 +13,8 @@ namespace Battleship.GameBoard
 
         public Position (int line, char column)
         {
-            Line = line;
-            Column = (int) char.GetNumericValue(column) - 'A' + 1;
+            Line = line - 1;
+            Column = (int)char.ToUpperInvariant(column) - 'A';
         }
     }
 }

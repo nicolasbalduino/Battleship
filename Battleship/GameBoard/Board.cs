@@ -1,12 +1,17 @@
-﻿namespace Battleship.GameBoard
+﻿using Microsoft.Win32.SafeHandles;
+
+namespace Battleship.GameBoard
 {
     internal class Board
     {
         public Piece[,] board;
-
+        public int Lines { get; private set; }
+        public int Columns { get; private set; }
         public Board(int lines, int columns)
         {
-            board = new Piece[lines, columns];
+            Lines = lines;
+            Columns = columns;
+            board = new Piece[Lines, Columns];
         }
 
         public void PrintBoard ()
@@ -29,13 +34,47 @@
             Console.WriteLine();
         }
 
-        public bool InsertPiece(Piece piece, Position pos) {
-            if (pos.Line < 0 || pos.Line > board.GetLength(0)) return false;
-            if (pos.Column < 0 || pos.Column > board.GetLength(1)) return false;
+        public bool InsertPiece(Piece piece, Position pos, char direction) {
 
-            if (board[pos.Line, pos.Column] == null) board[pos.Line, pos.Column] = piece;
-            else return false;
+            // Verificação de posições inválidas
+            if (pos.Line < 0 || pos.Line >= board.GetLength(0)) return false;
+            if (pos.Column < 0 || pos.Column >= board.GetLength(1)) return false;
+            if (direction != 'H' && direction != 'V') return false;
+
+            // Verificação e posicionamento na horizontal
+            if (direction == 'H')
+            {
+                for (int i = 0; i < piece.Size; i++)
+                {
+                    if (pos.Column + i >= board.GetLength(1)) return false;
+                    if (board[pos.Line, pos.Column + i] != null) return false;
+                }
+
+                for (int i = 0; i < piece.Size; i++)
+                {
+                    board[pos.Line, pos.Column + i] = piece;
+                }
+                return true;
+            }
+
+            // Verificação e posicionamento na vertical
+            for (int i = 0; i < piece.Size; i++)
+            {
+                if (pos.Line + i >= board.GetLength(0)) return false;
+                if (board[pos.Line + i, pos.Column] != null) return false;
+            }
+
+            for (int i = 0; i < piece.Size; i++)
+            {
+                board[pos.Line + i, pos.Column] = piece;
+            }
+
             return true;
+        }
+
+        public void ClearBoard()
+        {
+            board = new Piece[Lines, Columns];
         }
     }
 }
