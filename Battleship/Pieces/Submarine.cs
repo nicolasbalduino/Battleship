@@ -5,6 +5,7 @@ namespace Battleship.Pieces
     internal class Submarine : Piece
     {
         public Submarine() {
+            PieceName = "Submarine";
             Size = 3;
         }
 
