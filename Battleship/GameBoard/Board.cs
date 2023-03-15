@@ -86,13 +86,30 @@ namespace Battleship.GameBoard
             {
                 for (int i = 0; i < piece.Size; i++)
                 {
-                    if (pos.Column + i >= board.GetLength(1)) return false;
-                    if (board[pos.Line, pos.Column + i] != null) return false;
+                    if (pos.Column + i >= board.GetLength(1))
+                    {
+                        if (board[pos.Line, pos.Column - piece.Size + i] != null) return false;
+                    }
+                    else
+                    {
+                        if (board[pos.Line, pos.Column + i] != null) return false;
+                    }
+
+                    //if (pos.Column + i >= board.GetLength(1)) return false;
+                    //if (board[pos.Line, pos.Column + i] != null) return false;
                 }
 
                 for (int i = 0; i < piece.Size; i++)
                 {
-                    board[pos.Line, pos.Column + i] = piece;
+                    if (pos.Column + i >= board.GetLength(1))
+                    {
+                        board[pos.Line, pos.Column - piece.Size + i] = piece;
+                    }
+                    else
+                    {
+                        board[pos.Line, pos.Column + i] = piece;
+                    }
+                        
                 }
                 return true;
             }
@@ -100,14 +117,30 @@ namespace Battleship.GameBoard
             // Verificação e posicionamento na vertical
             for (int i = 0; i < piece.Size; i++)
             {
-                if (pos.Line + i >= board.GetLength(0)) return false;
-                if (board[pos.Line + i, pos.Column] != null) return false;
+                if (pos.Line + i >= board.GetLength(0))
+                {
+                    if (board[pos.Line - piece.Size + i, pos.Column] != null) return false;
+                }
+                else
+                {
+                    if (board[pos.Line + i, pos.Column] != null) return false;
+                }
+                //if (pos.Line + i >= board.GetLength(0)) return false;
+                //if (board[pos.Line + i, pos.Column] != null) return false;
             }
 
             // Insere o navio em cada posição da direção escolhida
             for (int i = 0; i < piece.Size; i++)
             {
-                board[pos.Line + i, pos.Column] = piece;
+                if (pos.Line + i >= board.GetLength(0))
+                {
+                    board[pos.Line - piece.Size + i, pos.Column] = piece;
+                }
+                else
+                {
+                    board[pos.Line + i, pos.Column] = piece;
+                }
+                
             }
 
             return true;
