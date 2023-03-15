@@ -1,10 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace Battleship.Board
+﻿namespace Battleship.GameBoard
 {
     internal class Board
     {
@@ -32,6 +26,16 @@ namespace Battleship.Board
 
                 Console.Write("\n------------------------------------------------------------------------------------");
             }
+            Console.WriteLine();
+        }
+
+        public bool InsertPiece(Piece piece, Position pos) {
+            if (pos.Line < 0 || pos.Line > board.GetLength(0)) return false;
+            if (pos.Column < 0 || pos.Column > board.GetLength(1)) return false;
+
+            if (board[pos.Line, pos.Column] == null) board[pos.Line, pos.Column] = piece;
+            else return false;
+            return true;
         }
     }
 }

@@ -1,8 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Battleship.GameBoard;
+using Battleship.Pieces;
 
 namespace Battleship
 {
@@ -10,51 +7,63 @@ namespace Battleship
     {
         public static void Main(string[] args)
         {
-                char[,] board = new char[20, 20];
-                board[0, 0] = 'X';
-                board[9, 9] = 'O';
+            // Declaração de variáveis
+            Board allyBoard = new(20, 20);
+            Board enemyBoard = new(20, 20);
+            Piece[] allyPieces = { new Destroyer(), new Submarine(), new AircraftCarrier()};
 
-                // impressao tabuleiro
-                Console.Write("   | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T |");
-                Console.Write("\n------------------------------------------------------------------------------------");
-                for (int line = 0; line < 20; line++)
-                {
-                    Console.Write("\n" + (line + 1).ToString("D2") + " | ");
-                    for (int column = 0; column < 20; column++)
-                    {
-                        if (board[line, column] == '\0')
-                            Console.Write("  | ");
-                        else
-                            Console.Write(board[line, column] + " | ");
-                    }
+            // Posicionamento de peças no tabuleiro
+            for (int i = 0; i < allyPieces.Length; i++)
+            {
+                
+                PlacePiece(allyPieces[i], allyBoard);
+            }
+            
+            
+        }
 
-                    Console.Write("\n------------------------------------------------------------------------------------");
-                }
+        public static void PlacePiece(Piece piece, Board board)
+        {
+            Console.Clear();
+            board.PrintBoard();
 
-                // Buscar coordenada
-                string coordenada;
-                do
-                {
-                    Console.Write("Digite uma coordenada (ex: A1): ");
-                    coordenada = Console.ReadLine();
+            Console.WriteLine("Peça atual: {0} | Espaços de ocupação: {1}", piece, piece.Size);
 
-                    if (char.IsLetter(coordenada[0]) && char.IsNumber(coordenada[1]))
-                    {
-                        Console.WriteLine("Coluna " + coordenada[0].ToString().ToUpper());
-                        Console.WriteLine("Linha " + coordenada[1]);
-                    }
-                    else if (char.IsLetter(coordenada[1]) && char.IsNumber(coordenada[0]))
-                    {
-                        Console.WriteLine("Coluna " + coordenada[1].ToString().ToUpper());
-                        Console.WriteLine("Coluna " + (char.ToUpperInvariant(coordenada[1]) - 'A'));
-                        Console.WriteLine("Linha " + coordenada[0]);
-                    }
-                    else
-                    {
-                        Console.WriteLine("Informe outra coordenada");
-                        coordenada = "\0";
-                    }
-                } while (coordenada.Length != 2);
+            Console.Write("Informe a coluna de posicionamento: ");
+            if (!char.TryParse(Console.ReadLine(), out char coordinateY))
+            {
+                PrintError("Coordenada inválida, tente novamente 1");
+                PlacePiece(piece, board);
+            }
+
+            Console.Write("Informe a linha de posicionamento: ");
+            if (!int.TryParse(Console.ReadLine(), out int coordinateX)) {
+
+                PrintError("Coordenada inválida, tente novamente 2");
+                PlacePiece(piece, board);
+            }
+            Position pos = new Position(coordinateX, coordinateY);
+            if (!board.InsertPiece(piece, pos))
+            {
+                PrintError($"Coordenada inválida, tente novamente {pos.Line} {pos.Column}");
+                PlacePiece(piece, board);
+            }
+        }
+
+        public static void PrintError(string message)
+        {
+            Console.Clear();
+
+            ConsoleColor aux = Console.ForegroundColor;
+            Console.ForegroundColor = ConsoleColor.Red;
+
+            Console.WriteLine(message);
+
+            Console.ForegroundColor = aux;
+            Console.WriteLine("ESPERE ");
+
+            Thread.Sleep(2000);
+            Console.Clear();
         }
     }
 }

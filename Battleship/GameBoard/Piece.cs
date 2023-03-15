@@ -4,9 +4,10 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Battleship.Board
+namespace Battleship.GameBoard
 {
     internal class Piece
     {
+        public int Size { get; set; }
     }
 }
