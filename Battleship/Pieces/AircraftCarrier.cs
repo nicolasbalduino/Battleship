@@ -2,7 +2,7 @@
 
 namespace Battleship.Pieces
 {
-    internal class AircraftCarrier : Piece
+    internal class AircraftCarrier : Ship
     {
         public AircraftCarrier()
         {

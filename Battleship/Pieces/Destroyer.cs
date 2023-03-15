@@ -2,7 +2,7 @@
 
 namespace Battleship.Pieces
 {
-    internal class Destroyer : Piece
+    internal class Destroyer : Ship
     {
         public Destroyer() {
             PieceName = "Destroyer";

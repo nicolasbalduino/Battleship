@@ -1,4 +1,5 @@
-﻿using Battleship.Pieces;
+﻿using System.Runtime.CompilerServices;
+using Battleship.Pieces;
 using Microsoft.Win32.SafeHandles;
 
 namespace Battleship.GameBoard
@@ -9,11 +10,14 @@ namespace Battleship.GameBoard
         public Piece[,] board;
         public int Lines { get; private set; }
         public int Columns { get; private set; }
+        public Piece[] RemovedPieces { get; private set; }
+
         public Board(int lines, int columns)
         {
             Lines = lines;
             Columns = columns;
             board = new Piece[Lines, Columns];
+            RemovedPieces = new Piece[3];
         }
 
         public void PrintBoard ()
@@ -57,9 +61,16 @@ namespace Battleship.GameBoard
 
                     else
                     {
+                        Piece piece = board[line, column];
                         // Adiciona cores de acordo com o acerto ou erro do tiro
-                        if (board[line, column] != null) Console.ForegroundColor = ConsoleColor.Red;
-                        else Console.BackgroundColor = ConsoleColor.Blue;
+                        if (piece is not Ship && piece == null)
+                        {
+                            Console.BackgroundColor = ConsoleColor.Blue;
+                        }
+                        else
+                        {
+                            Console.ForegroundColor = ConsoleColor.Red;
+                        }
                         Console.Write("X");
 
                         // Retorna às cores padrões do console
@@ -74,7 +85,7 @@ namespace Battleship.GameBoard
             Console.WriteLine();
         }
 
-        public bool InsertPiece(Piece piece, Position pos, char direction) {
+        public bool InsertPiece(Ship piece, Position pos, char direction) {
 
             // Verificação de posições inválidas
             if (pos.Line < 0 || pos.Line >= board.GetLength(0)) return false;
@@ -111,8 +122,11 @@ namespace Battleship.GameBoard
                     }
                         
                 }
+
+                // Caso passe nas verificações, a posição inicial é armazenada na propriedade da peça
                 piece.OriginalPosition[0] = pos.Line;
                 piece.OriginalPosition[1] = pos.Column;
+
                 return true;
             }
 
@@ -144,6 +158,9 @@ namespace Battleship.GameBoard
                 }
                 
             }
+
+            piece.OriginalPosition[0] = pos.Line;
+            piece.OriginalPosition[1] = pos.Column;
 
             return true;
         }

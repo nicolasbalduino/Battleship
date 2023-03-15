@@ -2,7 +2,7 @@
 
 namespace Battleship.Pieces
 {
-    internal class Submarine : Piece
+    internal class Submarine : Ship
     {
         public Submarine() {
             PieceName = "Submarine";
