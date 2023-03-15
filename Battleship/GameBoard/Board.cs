@@ -10,14 +10,12 @@ namespace Battleship.GameBoard
         public Piece[,] board;
         public int Lines { get; private set; }
         public int Columns { get; private set; }
-        public Piece[] RemovedPieces { get; private set; }
 
         public Board(int lines, int columns)
         {
             Lines = lines;
             Columns = columns;
             board = new Piece[Lines, Columns];
-            RemovedPieces = new Piece[3];
         }
 
         public void PrintBoard ()
@@ -45,8 +43,7 @@ namespace Battleship.GameBoard
         public void PrintShootBoard()
         {
             // Armazena as cores padrões de plano de fundo e principal
-            ConsoleColor auxF = Console.ForegroundColor;
-            ConsoleColor auxB = Console.BackgroundColor;
+            ConsoleColor aux = Console.ForegroundColor;
 
             Console.Write("   | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T |");
             Console.Write("\n------------------------------------------------------------------------------------");
@@ -55,28 +52,27 @@ namespace Battleship.GameBoard
                 Console.Write("\n" + (line + 1).ToString("D2") + " | ");
                 for (int column = 0; column < board.GetLength(1); column++)
                 {
-                    // Oculta qualquer peça que não for tiro
-                    if (!(board[line, column] is Shoot))
-                        Console.Write(" ");
+                    Piece piece = board[line, column];
 
-                    else
+                    // Troca cores do console caso haja um tiro de acerto em um navio
+                    if (piece is Shoot && piece.Overlap is Ship)
                     {
-                        Piece piece = board[line, column];
-                        // Adiciona cores de acordo com o acerto ou erro do tiro
-                        if (piece is not Ship && piece == null)
-                        {
-                            Console.BackgroundColor = ConsoleColor.Blue;
-                        }
-                        else
-                        {
-                            Console.ForegroundColor = ConsoleColor.Red;
-                        }
+                        Console.ForegroundColor = ConsoleColor.Red;
                         Console.Write("X");
-
-                        // Retorna às cores padrões do console
-                        Console.ForegroundColor = auxF;
-                        Console.BackgroundColor = auxB;
+                        Console.ForegroundColor = aux;
                     }
+
+                    // Troca cores do console caso haja um tiro sem acerto em um navio
+                    if (piece is Shoot && piece.Overlap == null)
+                    {
+                        Console.ForegroundColor = ConsoleColor.Blue;
+                        Console.Write("-");
+                        Console.ForegroundColor = aux;
+                    }
+
+                    // Oculta navios
+                    if (piece is Ship || piece == null) Console.Write(" ");
+
                     Console.Write(" | ");
                 }
 
@@ -105,9 +101,6 @@ namespace Battleship.GameBoard
                     {
                         if (board[pos.Line, pos.Column + i] != null) return false;
                     }
-
-                    //if (pos.Column + i >= board.GetLength(1)) return false;
-                    //if (board[pos.Line, pos.Column + i] != null) return false;
                 }
 
                 for (int i = 0; i < piece.Size; i++)
@@ -123,10 +116,6 @@ namespace Battleship.GameBoard
                         
                 }
 
-                // Caso passe nas verificações, a posição inicial é armazenada na propriedade da peça
-                piece.OriginalPosition[0] = pos.Line;
-                piece.OriginalPosition[1] = pos.Column;
-
                 return true;
             }
 
@@ -141,8 +130,6 @@ namespace Battleship.GameBoard
                 {
                     if (board[pos.Line + i, pos.Column] != null) return false;
                 }
-                //if (pos.Line + i >= board.GetLength(0)) return false;
-                //if (board[pos.Line + i, pos.Column] != null) return false;
             }
 
             // Insere o navio em cada posição da direção escolhida
@@ -156,11 +143,7 @@ namespace Battleship.GameBoard
                 {
                     board[pos.Line + i, pos.Column] = piece;
                 }
-                
             }
-
-            piece.OriginalPosition[0] = pos.Line;
-            piece.OriginalPosition[1] = pos.Column;
 
             return true;
         }
@@ -173,6 +156,9 @@ namespace Battleship.GameBoard
 
             // Verifica se já não há algum tiro na posição
             if (board[pos.Line, pos.Column] is Shoot) return false;
+
+            // Armazena peça sobreposta, caso exista
+            piece.Overlap = board[pos.Line, pos.Column];
 
             // Insere a peça tiro
             board[pos.Line, pos.Column] = piece;
