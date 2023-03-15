@@ -6,6 +6,7 @@ namespace Battleship.Pieces
     {
         public AircraftCarrier()
         {
+            PieceName = "Aircraft Carrier";
             Size = 5;
         }
 

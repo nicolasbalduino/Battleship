@@ -111,6 +111,8 @@ namespace Battleship.GameBoard
                     }
                         
                 }
+                piece.OriginalPosition[0] = pos.Line;
+                piece.OriginalPosition[1] = pos.Column;
                 return true;
             }
 

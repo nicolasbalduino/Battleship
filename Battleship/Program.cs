@@ -87,12 +87,13 @@ namespace Battleship
             // Caso não for do tipo Shoot, imprime o tabuleiro sem nada oculto
             else {
                 board.PrintBoard();
-                Console.WriteLine("Peça atual: {0} | Espaços de ocupação: {1}", piece, piece.Size);
+                Console.WriteLine("Peça atual: {0} | Espaços de ocupação: {1}", piece.PieceName, piece.Size);
             }
 
             Console.Write("Informe a coluna de posicionamento: ");
             // Tenta converter coordenada da coluna para caracter
-            if (!char.TryParse(Console.ReadLine(), out char coordinateY))
+            string columnString = Console.ReadLine();
+            if (!char.TryParse(columnString, out char coordinateY))
             {
                 PrintError("Coordenada inválida, tente novamente");
                 PlacePiece(piece, board);
@@ -101,7 +102,8 @@ namespace Battleship
 
             Console.Write("Informe a linha de posicionamento: ");
             // Tenta converter coordenada da linha para inteiro
-            if (!int.TryParse(Console.ReadLine(), out int coordinateX)) {
+            string lineString = Console.ReadLine();
+            if (!int.TryParse(lineString, out int coordinateX)) {
 
                 PrintError("Coordenada inválida, tente novamente");
                 PlacePiece(piece, board);
@@ -116,7 +118,8 @@ namespace Battleship
             {
                 Console.Write("Digite a direção de posicionamento (H - horizontal | V - vertical): ");
                 // Tenta converter direção para caracter
-                if (!char.TryParse(Console.ReadLine(), out char direction))
+                string directionString = Console.ReadLine();
+                if (!char.TryParse(directionString, out char direction))
                 {
                     PrintError("Direção inválida, tente novamente");
                     PlacePiece(piece, board);
@@ -136,7 +139,7 @@ namespace Battleship
             {
                 PrintError("Coordenada inválida, tente novamente");
                 PlacePiece(piece, board);
-            };
+            }
         }
 
         // Exibir erros com cor e pausa
