@@ -30,9 +30,10 @@ namespace Battleship
 
                 Console.Clear();
                 allyBoard.PrintBoard();
-                Console.Write("Deseja reposicionar? S para reposicionar | Qualquer outra letra para continuar: ");
 
-                if (Console.ReadLine() == "S")
+                Console.Write("Deseja reposicionar? S para reposicionar | Qualquer outra letra para continuar: ");
+                string opc = Console.ReadLine();
+                if (opc == "S" || opc == "s")
                 {
                     reposicionar = true;
                     allyBoard.ClearBoard();
@@ -58,7 +59,8 @@ namespace Battleship
                 enemyBoard.PrintBoard();
                 Console.Write("Deseja reposicionar? S para reposicionar | Qualquer outra letra para continuar: ");
 
-                if (Console.ReadLine().ToUpper() == "S")
+                string opc = Console.ReadLine();
+                if (opc == "S" || opc == "s")
                 {
                     reposicionar = true;
                     enemyBoard.ClearBoard();
@@ -80,13 +82,20 @@ namespace Battleship
 
                     if (hit)
                     {
+                        Console.Clear();
+                        enemyBoard.PrintShootBoard();
                         PrintAlert("Acertou miserável!", 'R');
+                        Console.ReadKey();
                         allyShoot++;
                     }
-                    else PrintError("Errou! Trocando de jogador...");
-                    Thread.Sleep(1000);
+                    else
+                    {
+                        PrintError("Errou! Trocando de jogador...");
+                        Thread.Sleep(1000);
+                    }
                 } while (hit && allyShoot < 9);
 
+                // Verifica se todas as peças foram acertadas
                 if (allyShoot == 9)
                 {
                     Console.Clear();
@@ -101,13 +110,20 @@ namespace Battleship
 
                     if (hit)
                     {
+                        Console.Clear();
+                        allyBoard.PrintShootBoard();
                         PrintAlert("Acertou miserável!", 'R');
+                        Console.ReadKey();
                         enemyShoot++;
                     }
-                    else PrintError("Errou! Trocando de jogador...");
-                    Thread.Sleep(1000);
+                    else
+                    {
+                        PrintError("Errou! Trocando de jogador...");
+                        Thread.Sleep(1000);
+                    }
                 } while (hit && enemyShoot < 9);
 
+                // Verifica se todas as peças foram acertadas
                 if (enemyShoot == 9)
                 {
                     Console.Clear();
@@ -115,8 +131,6 @@ namespace Battleship
                     break;
                 }
             } while (true);
-
-            Credits();
         }
 
         public static Position Coordenates()
@@ -239,10 +253,10 @@ namespace Battleship
             // Frescures
             Console.CursorVisible = false;
             string[] credits = {
-            "Desenvolvido por: Seu nome aqui",
-            "Agradecimentos especiais: Fulano, Beltrano",
-            "Copyright © 2023"
-        };
+                "Desenvolvido por: Seu nome aqui",
+                "Agradecimentos especiais: Fulano, Beltrano",
+                "Copyright © 2023"
+            };
             int y = Console.WindowHeight;
             int x = Console.WindowWidth / 2;
             while (y >= 0)

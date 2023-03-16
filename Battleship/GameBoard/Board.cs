@@ -20,6 +20,8 @@ namespace Battleship.GameBoard
 
         public void PrintBoard ()
         {
+            ConsoleColor aux = Console.ForegroundColor;
+
             Console.Write("   | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T |");
             Console.Write("\n------------------------------------------------------------------------------------");
             for (int line = 0; line < board.GetLength(0); line++)
@@ -28,10 +30,11 @@ namespace Battleship.GameBoard
                 for (int column = 0; column < board.GetLength(1); column++)
                 {
                     // Verifica se não há nada na posição
+                    if (board[line, column] is ShipBorder) Console.ForegroundColor = ConsoleColor.DarkBlue;
                     if (board[line, column] == null)
                         Console.Write(" ");
-                    else
-                        Console.Write(board[line, column]);
+                    else Console.Write(board[line, column]);
+                    Console.ForegroundColor = aux;
                     Console.Write(" | ");
                 }
 
@@ -72,7 +75,7 @@ namespace Battleship.GameBoard
                     }
 
                     // Oculta navios
-                    if (piece is Ship || piece == null) Console.Write(" ");
+                    if (piece is not Shoot) Console.Write(" ");
 
                     Console.Write(" | ");
                 }
@@ -88,6 +91,8 @@ namespace Battleship.GameBoard
             if (pos.Line < 0 || pos.Line >= board.GetLength(0)) return false;
             if (pos.Column < 0 || pos.Column >= board.GetLength(1)) return false;
             if (direction != 'H' && direction != 'V') return false;
+
+            // Verificação se há navios na coluna posterior ao que está sendo posicionado
 
             // Verificação e posicionamento na horizontal
             if (direction == 'H')
@@ -109,10 +114,12 @@ namespace Battleship.GameBoard
                     if (pos.Column + i >= board.GetLength(1))
                     {
                         board[pos.Line, pos.Column - piece.Size + i] = piece;
+                        PlaceBorder(pos.Line, pos.Column - piece.Size + i);
                     }
                     else
                     {
                         board[pos.Line, pos.Column + i] = piece;
+                        PlaceBorder(pos.Line, pos.Column + i);
                     }
                         
                 }
@@ -139,14 +146,55 @@ namespace Battleship.GameBoard
                 if (pos.Line + i >= board.GetLength(0))
                 {
                     board[pos.Line - piece.Size + i, pos.Column] = piece;
+                    PlaceBorder(pos.Line - piece.Size + i, pos.Column);
                 }
                 else
                 {
                     board[pos.Line + i, pos.Column] = piece;
+                    PlaceBorder(pos.Line + i, pos.Column);
                 }
             }
 
             return true;
+        }
+
+        // Insere bordas ao redor do navio
+        public void PlaceBorder(int line, int column)
+        {
+            ShipBorder shipBorder = new ShipBorder();
+
+            // Verifica e coloca em posições acima da peça
+            if (line > 0)
+            {
+                if (column > 0 && board[line - 1, column - 1] is not Ship) 
+                    board[line - 1, column - 1] = shipBorder;
+
+                if (board[line - 1, column] is not Ship) 
+                    board[line - 1, column] = shipBorder;
+
+                if (column < board.GetLength(1) - 1 && board[line - 1, column + 1] is not Ship) 
+                    board[line - 1, column + 1] = shipBorder;
+            }
+
+            // Verifica e coloca em posições à esquerda e direita da peça
+            if (column > 2 && board[line, column - 1] is not Ship)
+                board[line, column - 1] = shipBorder;
+
+            if (column < board.GetLength(1) - 1 && board[line, column + 1] is not Ship) 
+                board[line, column + 1] = shipBorder;
+
+            // Verifica e coloca em posições abaixo da peça
+            if (line < board.GetLength(1) - 1)
+            {
+                if (column > 0 && board[line + 1, column - 1] is not Ship) 
+                    board[line + 1, column - 1] = shipBorder;
+
+                if (board[line + 1, column] is not Ship) 
+                    board[line + 1, column] = shipBorder;
+
+                if (column < board.GetLength(1) - 1 && board[line + 1, column + 1] is not Ship) 
+                    board[line + 1, column + 1] = shipBorder;
+            }
         }
 
         public bool InsertShoot(Piece piece, Position pos)
@@ -159,7 +207,7 @@ namespace Battleship.GameBoard
             if (board[pos.Line, pos.Column] is Shoot) return false;
 
             // Armazena peça sobreposta, caso exista
-            piece.Overlap = board[pos.Line, pos.Column];
+            if (board[pos.Line, pos.Column] is not ShipBorder) piece.Overlap = board[pos.Line, pos.Column];
 
             // Insere a peça tiro
             board[pos.Line, pos.Column] = piece;
