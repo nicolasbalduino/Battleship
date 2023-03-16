@@ -4,9 +4,9 @@ namespace Battleship.Entities
 {
     internal class Destroyer : Ship
     {
-        public Destroyer(string typeOf, int sizeOf) : base(typeOf, sizeOf)
+        public Destroyer()
         {
-            sizeOf = 3;
+            SizeOf = 2;
         }
 
         public override string ToString()

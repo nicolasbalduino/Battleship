@@ -3,9 +3,10 @@
 namespace Battleship.Entities
 {
     internal class Submarine : Ship
-    {
-        public Submarine(string typeOf, int sizeOf) : base(typeOf, sizeOf)
-        {            
+    {        
+        public Submarine()
+        {
+            SizeOf = 2;
         }
 
         public override string ToString()

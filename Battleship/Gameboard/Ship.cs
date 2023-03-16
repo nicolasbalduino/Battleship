@@ -2,6 +2,7 @@
 {
     abstract class Ship
     {
+
         public string TypeOf { get; set; }        
         public int SizeOf { get; protected set; }
 
@@ -11,6 +12,9 @@
             SizeOf = sizeOf;
         }
 
-        public Ship() { }
+        public override string ToString()
+        {
+            return base.ToString();
+        }
     }
 }

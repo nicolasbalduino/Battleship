@@ -6,7 +6,10 @@ namespace Battleship.Entities
         public string Name { get; set; }
         public Playerboard Playerboard { get; protected set; }
         
-
+        public Player()
+        {
+            Name = string.Empty;
+        }
 
         string ToShot()
         {
