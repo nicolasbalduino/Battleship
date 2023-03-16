@@ -6,7 +6,7 @@ namespace Gameboard
     {
         public int Rows { get; set; }
         public int Columns { get; set; }
-        private Ship[,] Ships;
+        public Ship[,] Ships;
         
         public Playerboard(int rows, int columns)
         {
@@ -45,8 +45,8 @@ namespace Gameboard
         {
             if (!VeifyIfPositionIsValid(pos))
             {
-                Console.WriteLine("Invalid position\n" +
-                                  "Please try another...");
+                Console.WriteLine("Posição inválida\n" +
+                                  "POr favor tente de novo...");
             }
         }
     }

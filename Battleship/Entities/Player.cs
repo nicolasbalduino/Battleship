@@ -9,16 +9,15 @@ namespace Battleship.Entities
         
         public Player()
         {
-            Name = string.Empty;
-            
+            Name = string.Empty;            
         }
 
         public void PlaceShipInBoard(Ship sh, Position pos )
         {
             if (Playerboard.VerifyExistentShip(pos))
             {
-                Console.WriteLine("There is already a ship there...\n" +
-                                  "Pass new cordinates...");
+                Console.WriteLine("Já existe uma embarcação ali\n" +
+                                  "Insira novas coordenadas...");
             }
             Playerboard.Ships[pos.Row, pos.Column] = sh;
             sh.Position = pos;
