@@ -44,6 +44,7 @@ namespace Battleship.GameBoard
         {
             // Armazena as cores padrões de plano de fundo e principal
             ConsoleColor aux = Console.ForegroundColor;
+            ConsoleColor auxB = Console.BackgroundColor;
 
             Console.Write("   | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T |");
             Console.Write("\n------------------------------------------------------------------------------------");
@@ -65,9 +66,9 @@ namespace Battleship.GameBoard
                     // Troca cores do console caso haja um tiro sem acerto em um navio
                     if (piece is Shoot && piece.Overlap == null)
                     {
-                        Console.ForegroundColor = ConsoleColor.Blue;
-                        Console.Write("-");
-                        Console.ForegroundColor = aux;
+                        Console.BackgroundColor = ConsoleColor.Blue;
+                        Console.Write(" ");
+                        Console.BackgroundColor = auxB;
                     }
 
                     // Oculta navios

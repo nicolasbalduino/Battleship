@@ -1,4 +1,4 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Diagnostics;
 using Battleship.GameBoard;
 using Battleship.Pieces;
 
@@ -67,11 +67,56 @@ namespace Battleship
             } while (reposicionar);
 
             // Início do jogo
+            int allyShoot = 0;
+            int enemyShoot = 0;
             do
             {
-                // Envia um novo tiro para o tabuleiro do inimigo
-                PlaceShoot(new Shoot(), enemyBoard);
+                bool hit = false;
+
+                // Jogador 1
+                do
+                {
+                    hit = PlaceShoot(new Shoot(), enemyBoard, 1);
+
+                    if (hit)
+                    {
+                        PrintAlert("Acertou miserável!", 'R');
+                        allyShoot++;
+                    }
+                    else PrintError("Errou! Trocando de jogador...");
+                    Thread.Sleep(1000);
+                } while (hit && allyShoot < 9);
+
+                if (allyShoot == 9)
+                {
+                    Console.Clear();
+                    PrintAlert("Vitória do jogador 1", 'R');
+                    break;
+                }
+
+                // Jogador 2
+                do
+                {
+                    hit = PlaceShoot(new Shoot(), allyBoard, 2);
+
+                    if (hit)
+                    {
+                        PrintAlert("Acertou miserável!", 'R');
+                        enemyShoot++;
+                    }
+                    else PrintError("Errou! Trocando de jogador...");
+                    Thread.Sleep(1000);
+                } while (hit && enemyShoot < 9);
+
+                if (enemyShoot == 9)
+                {
+                    Console.Clear();
+                    PrintAlert("vitória do jogador 2", 'R');
+                    break;
+                }
             } while (true);
+
+            Credits();
         }
 
         public static Position Coordenates()
@@ -133,7 +178,7 @@ namespace Battleship
         } 
 
         // Posiciona o tiro no tabuleiro
-        public static void PlaceShoot(Piece piece, Board board)
+        public static bool PlaceShoot(Piece piece, Board board, int player)
         {
             Position pos;
             do
@@ -141,16 +186,18 @@ namespace Battleship
                 Console.Clear();
                 board.PrintShootBoard();
 
-                Console.WriteLine("Posicione seu tiro");
+                Console.WriteLine("JOGADOR {0}, Insira as coordenadas do tiro", player);
                 pos = Coordenates();
             } while (pos == null);
-
 
             if (!board.InsertShoot(piece, pos))
             {
                 PrintError("Coordenada inválida, tente novamente");
-                PlaceShoot(piece, board);
+                PlaceShoot(piece, board, player);
             }
+
+            if (piece.Overlap != null) return true;
+            return false;
         }
 
         // Exibir erros com pausa e cor
@@ -185,6 +232,31 @@ namespace Battleship
             }
             Console.WriteLine(message);
             Console.ForegroundColor = aux;
+        }
+
+        public static void Credits()
+        {
+            // Frescures
+            Console.CursorVisible = false;
+            string[] credits = {
+            "Desenvolvido por: Seu nome aqui",
+            "Agradecimentos especiais: Fulano, Beltrano",
+            "Copyright © 2023"
+        };
+            int y = Console.WindowHeight;
+            int x = Console.WindowWidth / 2;
+            while (y >= 0)
+            {
+                Console.Clear();
+                for (int i = 0; i < credits.Length; i++)
+                {
+                    Console.SetCursorPosition(x - credits[i].Length / 2, y + i);
+                    Console.Write(credits[i]);
+                }
+                Thread.Sleep(50);
+                y--;
+            }
+            Console.Clear();
         }
     }
 }
