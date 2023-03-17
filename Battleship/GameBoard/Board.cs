@@ -1,6 +1,4 @@
-﻿using System.Runtime.CompilerServices;
-using Battleship.Pieces;
-using Microsoft.Win32.SafeHandles;
+﻿using Battleship.Pieces;
 
 namespace Battleship.GameBoard
 {
@@ -10,20 +8,26 @@ namespace Battleship.GameBoard
         public Piece[,] board;
         public int Lines { get; private set; }
         public int Columns { get; private set; }
-
+        public char[] Letters { get; private set; }
+        public string[] SunkenShips { get; private set; }
         public Board(int lines, int columns)
         {
             Lines = lines;
             Columns = columns;
             board = new Piece[Lines, Columns];
+            SunkenShips = new string[3];
+            Letters = new char[]{ 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' };
         }
 
         public void PrintBoard ()
         {
             ConsoleColor aux = Console.ForegroundColor;
-
-            Console.Write("   | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T |");
-            Console.Write("\n------------------------------------------------------------------------------------");
+            Console.Write("   |");
+            for (int i = 0; i < Columns; i++)
+            {
+                Console.Write(" {0} |", Letters[i]);
+            }
+            Console.Write("\n" + new string('-', 4 * (Lines + 1)));
             for (int line = 0; line < board.GetLength(0); line++)
             {
                 Console.Write("\n" + (line + 1).ToString("D2") + " | ");
@@ -38,7 +42,7 @@ namespace Battleship.GameBoard
                     Console.Write(" | ");
                 }
 
-                Console.Write("\n------------------------------------------------------------------------------------");
+                Console.Write("\n" + new string('-', 4 * (Lines + 1)));
             }
             Console.WriteLine();
         }
@@ -48,9 +52,14 @@ namespace Battleship.GameBoard
             // Armazena as cores padrões de plano de fundo e principal
             ConsoleColor aux = Console.ForegroundColor;
             ConsoleColor auxB = Console.BackgroundColor;
+            Console.Write("   |");
+            for (int i = 0; i < Columns; i++)
+            {
+                Console.Write(" {0} |", Letters[i]);
+            }
 
-            Console.Write("   | A | B | C | D | E | F | G | H | I | J | K | L | M | N | O | P | Q | R | S | T |");
-            Console.Write("\n------------------------------------------------------------------------------------");
+            Console.Write("\n" + new string('-', 4 * (Lines + 1)));
+
             for (int line = 0; line < board.GetLength(0); line++)
             {
                 Console.Write("\n" + (line + 1).ToString("D2") + " | ");
@@ -80,7 +89,8 @@ namespace Battleship.GameBoard
                     Console.Write(" | ");
                 }
 
-                Console.Write("\n------------------------------------------------------------------------------------");
+                Console.Write("\n" + new string('-', 4 * (Lines + 1)));
+
             }
             Console.WriteLine();
         }
@@ -91,8 +101,6 @@ namespace Battleship.GameBoard
             if (pos.Line < 0 || pos.Line >= board.GetLength(0)) return false;
             if (pos.Column < 0 || pos.Column >= board.GetLength(1)) return false;
             if (direction != 'H' && direction != 'V') return false;
-
-            // Verificação se há navios na coluna posterior ao que está sendo posicionado
 
             // Verificação e posicionamento na horizontal
             if (direction == 'H')
@@ -177,7 +185,7 @@ namespace Battleship.GameBoard
             }
 
             // Verifica e coloca em posições à esquerda e direita da peça
-            if (column > 2 && board[line, column - 1] is not Ship)
+            if (column > 0 && board[line, column - 1] is not Ship)
                 board[line, column - 1] = shipBorder;
 
             if (column < board.GetLength(1) - 1 && board[line, column + 1] is not Ship) 
@@ -209,9 +217,29 @@ namespace Battleship.GameBoard
             // Armazena peça sobreposta, caso exista
             if (board[pos.Line, pos.Column] is not ShipBorder) piece.Overlap = board[pos.Line, pos.Column];
 
+            // Diminui quantidade de peças restante do navio, caso exista
+            if (piece.Overlap != null)
+            {
+                Ship shipShooted = ((Ship)piece.Overlap);
+                shipShooted.Size--;
+                if (shipShooted.Size == 0) ShipSunked(shipShooted);
+            }
+
             // Insere a peça tiro
             board[pos.Line, pos.Column] = piece;
             return true;
+        }
+
+        public void ShipSunked (Piece ShipSunk)
+        {
+            for (int i = 0; i < SunkenShips.Length; i++)
+            {
+                if (SunkenShips[i] == null)
+                {
+                    SunkenShips[i] = ShipSunk.PieceName;
+                    return;
+                }
+            }
         }
 
         public void ClearBoard()

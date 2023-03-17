@@ -1,5 +1,4 @@
-﻿using System.Diagnostics;
-using Battleship.GameBoard;
+﻿using Battleship.GameBoard;
 using Battleship.Pieces;
 
 namespace Battleship
@@ -11,12 +10,22 @@ namespace Battleship
             // Declaração de variáveis
             Board allyBoard = new(20, 20);
             Board enemyBoard = new(20, 20);
-            Ship[] allyPieces = { new Destroyer(), new Submarine(), new AircraftCarrier()};
-            Ship[] enemyPieces = { new Destroyer(), new Submarine(), new AircraftCarrier()};
+            Ship[] allyPieces = { new Destroyer(), new Submarine(), new AircraftCarrier() };
+            Ship[] enemyPieces = { new Destroyer(), new Submarine(), new AircraftCarrier() };
             bool reposicionar;
 
+            Console.WriteLine("BATALHA NAVAL");
+            // Escolha de nome de jogadores
+            Console.Write("Jogador 1, Informe seu nome: ");
+            string player1 = Console.ReadLine();
+
+            Console.Write("Jogador 2, Informe seu nome: ");
+            string player2 = Console.ReadLine();
+
+            Console.Clear();
+
             // Posicionamento de peças no tabuleiro
-            PrintAlert("Posicionamento de peças aliadas",'G');
+            PrintAlert("Posicionamento de peças aliadas", 'G');
             Thread.Sleep(2000);
 
             // Loop até usuário confirmar posicionamentos
@@ -25,7 +34,7 @@ namespace Battleship
                 // Loop até todas as peças forem posicionadas
                 for (int i = 0; i < allyPieces.Length; i++)
                 {
-                    PlaceShip(allyPieces[i], allyBoard);
+                    PlaceShip(allyPieces[i], allyBoard, player1);
                 }
 
                 Console.Clear();
@@ -43,7 +52,7 @@ namespace Battleship
 
             Console.Clear();
 
-            PrintAlert("Posicionamento de peças do oponente", 'G');
+            PrintAlert("Posicionamento de peças do oponente", 'R');
             Thread.Sleep(2000);
 
             // Loop até usuário confirmar posicionamentos
@@ -52,7 +61,7 @@ namespace Battleship
                 // Loop até todas as peças forem posicionadas
                 for (int i = 0; i < enemyPieces.Length; i++)
                 {
-                    PlaceShip(enemyPieces[i], enemyBoard);
+                    PlaceShip(enemyPieces[i], enemyBoard, player2);
                 }
 
                 Console.Clear();
@@ -78,48 +87,44 @@ namespace Battleship
                 // Jogador 1
                 do
                 {
-                    hit = PlaceShoot(new Shoot(), enemyBoard, 1);
+                    hit = PlaceShoot(new Shoot(), enemyBoard, player1);
 
                     if (hit)
                     {
                         Console.Clear();
                         enemyBoard.PrintShootBoard();
-                        PrintAlert("Acertou miserável!", 'R');
+                        PrintAlert("Acertou miserável! Aperte qualquer tecla para continuar", 'R');
                         Console.ReadKey();
                         allyShoot++;
                     }
-                    else
-                    {
-                        PrintError("Errou! Trocando de jogador...");
-                        Thread.Sleep(1000);
-                    }
+                    else PrintError("Errou! Aperte qualquer tecla para trocar de jogador...");
                 } while (hit && allyShoot < 9);
 
                 // Verifica se todas as peças foram acertadas
                 if (allyShoot == 9)
                 {
                     Console.Clear();
-                    PrintAlert("Vitória do jogador 1", 'R');
+                    PrintAlert($"{player1} Venceu!", 'R');
                     break;
                 }
 
                 // Jogador 2
                 do
                 {
-                    hit = PlaceShoot(new Shoot(), allyBoard, 2);
+                    hit = PlaceShoot(new Shoot(), allyBoard, player2);
 
                     if (hit)
                     {
                         Console.Clear();
                         allyBoard.PrintShootBoard();
-                        PrintAlert("Acertou miserável!", 'R');
+                        PrintAlert("Acertou miserável! aperte qualquer tecla para continuar", 'R');
                         Console.ReadKey();
                         enemyShoot++;
                     }
                     else
                     {
-                        PrintError("Errou! Trocando de jogador...");
-                        Thread.Sleep(1000);
+                        PrintError("Errou! Aperte qualquer tecla para trocar de jogador...");
+                        Console.ReadKey();
                     }
                 } while (hit && enemyShoot < 9);
 
@@ -127,7 +132,7 @@ namespace Battleship
                 if (enemyShoot == 9)
                 {
                     Console.Clear();
-                    PrintAlert("vitória do jogador 2", 'R');
+                    PrintAlert($"{player2} Venceu!", 'R');
                     break;
                 }
             } while (true);
@@ -140,7 +145,7 @@ namespace Battleship
             string columnString = Console.ReadLine();
             if (!char.TryParse(columnString, out char coordinateY))
             {
-                PrintError("Coordenada inválida, tente novamente");
+                PrintError("Coordenada inválida, aperte qualquer tecla para tentar novamente");
                 return null;
             }
             Thread.Sleep(100);
@@ -150,7 +155,7 @@ namespace Battleship
             string lineString = Console.ReadLine();
             if (!int.TryParse(lineString, out int coordinateX))
             {
-                PrintError("Coordenada inválida, tente novamente");
+                PrintError("Coordenada inválida, aperte qualquer tecla para tentar novamente");
                 return null;
             }
             Thread.Sleep(100);
@@ -161,7 +166,7 @@ namespace Battleship
         }
 
         // Posiciona o navio no tabuleiro
-        public static void PlaceShip (Ship piece, Board board)
+        public static void PlaceShip(Ship piece, Board board, string playerName)
         {
             Position pos;
 
@@ -169,8 +174,7 @@ namespace Battleship
             {
                 Console.Clear();
                 board.PrintBoard();
-
-                Console.WriteLine("Peça atual: {0} | Espaços de ocupação: {1}", piece.PieceName, piece.Size);
+                Console.WriteLine("{0} | Peça atual: {1} | Espaços de ocupação: {2}", playerName, piece.PieceName, piece.Size);
                 pos = Coordenates();
             } while (pos == null);
 
@@ -179,20 +183,20 @@ namespace Battleship
             string directionString = Console.ReadLine();
             if (!char.TryParse(directionString, out char direction))
             {
-                PrintError("Direção inválida, tente novamente");
-                PlaceShip(piece, board);
+                PrintError("Direção inválida, aperte qualquer tecla para tentar novamente");
+                PlaceShip(piece, board, playerName);
             }
             Thread.Sleep(100);
 
             if (!board.InsertPiece(piece, pos, char.ToUpper(direction)))
             {
-                PrintError("Coordenada inválida, tente novamente");
-                PlaceShip(piece, board);
+                PrintError("Coordenada inválida, aperte qualquer tecla para tentar novamente");
+                PlaceShip(piece, board, playerName);
             }
-        } 
+        }
 
         // Posiciona o tiro no tabuleiro
-        public static bool PlaceShoot(Piece piece, Board board, int player)
+        public static bool PlaceShoot(Piece piece, Board board, string playerName)
         {
             Position pos;
             do
@@ -200,14 +204,22 @@ namespace Battleship
                 Console.Clear();
                 board.PrintShootBoard();
 
-                Console.WriteLine("JOGADOR {0}, Insira as coordenadas do tiro", player);
+                // Imprime os navios afundados:
+                Console.Write("Navios afundados: ");
+                foreach (string ship in board.SunkenShips)
+                {
+                    Console.Write("{0} ", ship);
+                }
+                Console.WriteLine();
+
+                Console.WriteLine("{0} | Insira as coordenadas do tiro", playerName);
                 pos = Coordenates();
             } while (pos == null);
 
             if (!board.InsertShoot(piece, pos))
             {
                 PrintError("Coordenada inválida, tente novamente");
-                PlaceShoot(piece, board, player);
+                PlaceShoot(piece, board, playerName);
             }
 
             if (piece.Overlap != null) return true;
@@ -225,9 +237,8 @@ namespace Battleship
             Console.WriteLine(message);
 
             Console.ForegroundColor = aux;
-            Console.WriteLine("ESPERE ");
 
-            Thread.Sleep(1500);
+            Console.ReadKey();
             Console.Clear();
         }
 
@@ -238,7 +249,8 @@ namespace Battleship
 
             switch (color)
             {
-                case 'R': Console.ForegroundColor = ConsoleColor.Red;
+                case 'R':
+                    Console.ForegroundColor = ConsoleColor.Red;
                     break;
                 case 'G':
                     Console.ForegroundColor = ConsoleColor.Green;

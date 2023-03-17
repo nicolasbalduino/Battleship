@@ -11,7 +11,6 @@ namespace Battleship.GameBoard
         public string PieceName { get; protected set; }
         public Piece Overlap { get; set; }
 
-
         public Piece()
         {
             PieceName = "Piece";
