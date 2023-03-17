@@ -1,5 +1,6 @@
 ﻿using Battleship.GameBoard;
 using Battleship.Pieces;
+using System.Threading.Channels;
 
 namespace Battleship
 {
@@ -7,6 +8,8 @@ namespace Battleship
     {
         public static void Main(string[] args)
         {
+
+            GamePresents();
             // Declaração de variáveis
             Board allyBoard = new(20, 20);
             Board enemyBoard = new(20, 20);
@@ -283,6 +286,41 @@ namespace Battleship
                 y--;
             }
             Console.Clear();
+        }
+
+        public static void GamePresents()
+        {
+            Console.ForegroundColor = ConsoleColor.Green;
+            Console.WriteLine("_____________________________________________________________________________________________");
+            Console.WriteLine("|                                                                                            |");
+            Console.WriteLine("|    BBBBB     AAA   TTTTTTTT  TTTTTTTT  LL     EEEEEEE  SSSSSS  HH   HH  IIII  PPPPPP       |");
+            Console.WriteLine("|    BB   B   AAAAA     TT        TT     LL     EE      SS       HH   HH   II   PP   PP      |");
+            Console.WriteLine("|    BBBBB   AA   AA    TT        TT     LL     EEEEE    SSSSS   HHHHHHH   II   PPPPPP       |");
+            Console.WriteLine("|    BB   B AAAAAAAAA   TT        TT     LL     EE           SS  HH   HH   II   PP           |");
+            Console.WriteLine("|    BBBBB   AA   AA    TT        TT     LLLLLL EEEEEEE  SSSSSS  HH   HH  IIII  PP           |");
+            Console.WriteLine("|____________________________________________________________________________________________|");
+            Console.WriteLine("|                                                                                            |");
+            Console.WriteLine("|                                                                                            |");
+            Console.WriteLine("|                                                                                            |");
+            Console.WriteLine("|                                                                                            |");
+            Console.WriteLine("|                                                                                            |");
+            Console.WriteLine("|                                                                                            |");
+            Console.WriteLine("|                                                                                            |");
+            Console.WriteLine("|                                                                                            |");
+            Console.WriteLine("|             ___|00000|===__                                     __===|00000|___            |");
+            Console.WriteLine("|            \\__º__º__º__º__/                                    \\__º__º__º__º__/            |");
+            Console.WriteLine("| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  |");
+            Console.WriteLine("|                                                                                            |");
+            Console.WriteLine("|                        ____|0|__                             __|0|____                     |");
+            Console.WriteLine("|                     x=(_________)                           (_________)=x                  |");
+            Console.WriteLine("|                                                                                            |");
+            Console.WriteLine("|____________________________________________________________________________________________|");
+            Console.WriteLine();
+            Console.ForegroundColor= ConsoleColor.Red;
+            Console.WriteLine("Aperte Enter para jogar_ ");
+            Console.ReadLine();
+            Console.ForegroundColor = ConsoleColor.Green;
+
         }
     }
 }
