@@ -1,6 +1,5 @@
 ﻿using Battleship.GameBoard;
 using Battleship.Pieces;
-using System.Threading.Channels;
 
 namespace Battleship
 {
@@ -8,22 +7,40 @@ namespace Battleship
     {
         public static void Main(string[] args)
         {
-
+            // Introdução do jogo
             GamePresents();
+
             // Declaração de variáveis
-            Board allyBoard = new(20, 20);
-            Board enemyBoard = new(20, 20);
+            Board allyBoard = new(10, 10);
+            Board enemyBoard = new(10, 10);
             Ship[] allyPieces = { new Destroyer(), new Submarine(), new AircraftCarrier() };
             Ship[] enemyPieces = { new Destroyer(), new Submarine(), new AircraftCarrier() };
+            Machine machine = new(enemyBoard, allyBoard);
             bool reposicionar;
 
-            Console.WriteLine("BATALHA NAVAL");
-            // Escolha de nome de jogadores
-            Console.Write("Jogador 1, Informe seu nome: ");
-            string player1 = Console.ReadLine();
+            // Escolha de modo de jogo
+            int gameMode = 0;
+            do
+            {
+                Console.Clear();
+                Console.WriteLine("1 - Modo 2 jogadores");
+                Console.WriteLine("2 - Modo Contra a máquina");
+                Console.Write("Escolha o modo de jogo: ");
+                int.TryParse(Console.ReadLine(), out gameMode);
+            } while (gameMode != 1 && gameMode != 2);
 
-            Console.Write("Jogador 2, Informe seu nome: ");
-            string player2 = Console.ReadLine();
+            // Escolha de nome de jogadores
+            string player1, player2;
+
+            Console.Write("Jogador 1, Informe seu nome: ");
+            player1 = Console.ReadLine();
+
+            if (gameMode == 1)
+            {
+                Console.Write("Jogador 2, Informe seu nome: ");
+                player2 = Console.ReadLine();
+            }
+            else player2 = "Maquina";
 
             Console.Clear();
 
@@ -55,30 +72,49 @@ namespace Battleship
 
             Console.Clear();
 
-            PrintAlert("Posicionamento de peças do oponente", 'R');
-            Thread.Sleep(2000);
-
-            // Loop até usuário confirmar posicionamentos
-            do
+            if (gameMode == 1)
             {
+                PrintAlert("Posicionamento de peças do oponente", 'R');
+                Thread.Sleep(2000);
+
+                // Loop até usuário confirmar posicionamentos
+                do
+                {
+                    // Loop até todas as peças forem posicionadas
+                    for (int i = 0; i < enemyPieces.Length; i++)
+                    {
+                        PlaceShip(enemyPieces[i], enemyBoard, player2);
+                    }
+
+                    Console.Clear();
+                    enemyBoard.PrintBoard();
+                    Console.Write("Deseja reposicionar? S para reposicionar | Qualquer outra letra para continuar: ");
+
+                    string opc = Console.ReadLine();
+                    if (opc == "S" || opc == "s")
+                    {
+                        reposicionar = true;
+                        enemyBoard.ClearBoard();
+                    }
+                    else reposicionar = false;
+                } while (reposicionar);
+            }
+
+            else
+            {
+                PrintAlert("Posicionamento das peças da máquina", 'R');
+                Thread.Sleep(2000);
+
                 // Loop até todas as peças forem posicionadas
                 for (int i = 0; i < enemyPieces.Length; i++)
                 {
-                    PlaceShip(enemyPieces[i], enemyBoard, player2);
+                    machine.PlaceShip(enemyPieces[i]);
                 }
 
-                Console.Clear();
                 enemyBoard.PrintBoard();
                 Console.Write("Deseja reposicionar? S para reposicionar | Qualquer outra letra para continuar: ");
-
-                string opc = Console.ReadLine();
-                if (opc == "S" || opc == "s")
-                {
-                    reposicionar = true;
-                    enemyBoard.ClearBoard();
-                }
-                else reposicionar = false;
-            } while (reposicionar);
+                Console.ReadKey();
+            }
 
             // Início do jogo
             int allyShoot = 0;
@@ -91,16 +127,7 @@ namespace Battleship
                 do
                 {
                     hit = PlaceShoot(new Shoot(), enemyBoard, player1);
-
-                    if (hit)
-                    {
-                        Console.Clear();
-                        enemyBoard.PrintShootBoard();
-                        PrintAlert("Acertou miserável! Aperte qualquer tecla para continuar", 'R');
-                        Console.ReadKey();
-                        allyShoot++;
-                    }
-                    else PrintError("Errou! Aperte qualquer tecla para trocar de jogador...");
+                    if (hit) allyShoot++;
                 } while (hit && allyShoot < 9);
 
                 // Verifica se todas as peças foram acertadas
@@ -112,24 +139,45 @@ namespace Battleship
                 }
 
                 // Jogador 2
-                do
+                if (gameMode == 1)
                 {
-                    hit = PlaceShoot(new Shoot(), allyBoard, player2);
+                    do
+                    {
+                        hit = PlaceShoot(new Shoot(), allyBoard, player2);
+                        if (hit) enemyShoot++;
+                    } while (hit && enemyShoot < 9);
+                }
 
-                    if (hit)
+                // Máquina
+                else
+                {
+                    do
                     {
+                        Position machineShoot;
+                        hit = machine.PlaceRandomShoot(out machineShoot);
+
                         Console.Clear();
-                        allyBoard.PrintShootBoard();
-                        PrintAlert("Acertou miserável! aperte qualquer tecla para continuar", 'R');
-                        Console.ReadKey();
-                        enemyShoot++;
-                    }
-                    else
-                    {
-                        PrintError("Errou! Aperte qualquer tecla para trocar de jogador...");
-                        Console.ReadKey();
-                    }
-                } while (hit && enemyShoot < 9);
+                        MachineShootAlert(allyBoard, machineShoot, hit);
+
+                        if (hit)
+                        {
+                            if (machine.AllShootedPositions() == 9) break;
+                            Console.Clear();
+                            hit = machine.PlaceProximityShoot(ref machineShoot);
+
+                            MachineShootAlert(allyBoard, machineShoot, hit);
+
+                            // Caso acerte novamente, máquina realizara tiros sequenciais
+                            while (hit)
+                            {
+                                if (machine.AllShootedPositions() == 9) break;
+                                hit = machine.PlaceSequentialShoot(ref machineShoot);
+                                MachineShootAlert(allyBoard, machineShoot, hit);
+                            }
+                        }
+                        if (machine.AllShootedPositions() == 9) break;
+                    } while (hit);
+                }
 
                 // Verifica se todas as peças foram acertadas
                 if (enemyShoot == 9)
@@ -141,7 +189,7 @@ namespace Battleship
             } while (true);
         }
 
-        public static Position Coordenates()
+        public static Position Coordinates()
         {
             Console.Write("Informe a coluna de posicionamento: ");
             // Tenta converter coordenada da coluna para caractere
@@ -164,7 +212,7 @@ namespace Battleship
             Thread.Sleep(100);
 
             // Cria uma nova posição, com X e Y convertidos corretamente
-            Position pos = new Position(coordinateX, char.ToUpper(coordinateY));
+            Position pos = new Position(coordinateX - 1, ((int)char.ToUpperInvariant(coordinateY) - 'A'));
             return pos;
         }
 
@@ -178,7 +226,7 @@ namespace Battleship
                 Console.Clear();
                 board.PrintBoard();
                 Console.WriteLine("{0} | Peça atual: {1} | Espaços de ocupação: {2}", playerName, piece.PieceName, piece.Size);
-                pos = Coordenates();
+                pos = Coordinates();
             } while (pos == null);
 
             Console.Write("Digite a direção de posicionamento (H - horizontal | V - vertical): ");
@@ -216,17 +264,21 @@ namespace Battleship
                 Console.WriteLine();
 
                 Console.WriteLine("{0} | Insira as coordenadas do tiro", playerName);
-                pos = Coordenates();
+                pos = Coordinates();
             } while (pos == null);
 
             if (!board.InsertShoot(piece, pos))
             {
                 PrintError("Coordenada inválida, tente novamente");
                 PlaceShoot(piece, board, playerName);
+                return false;
             }
 
-            if (piece.Overlap != null) return true;
-            return false;
+            bool hit = piece.Overlap != null;
+
+            PlayerShootAlert(board, pos, hit, playerName);
+
+            return hit;
         }
 
         // Exibir erros com pausa e cor
@@ -263,31 +315,6 @@ namespace Battleship
             Console.ForegroundColor = aux;
         }
 
-        public static void Credits()
-        {
-            // Frescures
-            Console.CursorVisible = false;
-            string[] credits = {
-                "Desenvolvido por: Seu nome aqui",
-                "Agradecimentos especiais: Fulano, Beltrano",
-                "Copyright © 2023"
-            };
-            int y = Console.WindowHeight;
-            int x = Console.WindowWidth / 2;
-            while (y >= 0)
-            {
-                Console.Clear();
-                for (int i = 0; i < credits.Length; i++)
-                {
-                    Console.SetCursorPosition(x - credits[i].Length / 2, y + i);
-                    Console.Write(credits[i]);
-                }
-                Thread.Sleep(50);
-                y--;
-            }
-            Console.Clear();
-        }
-
         public static void GamePresents()
         {
             Console.ForegroundColor = ConsoleColor.Green;
@@ -316,10 +343,39 @@ namespace Battleship
             Console.WriteLine("|                                                                                            |");
             Console.WriteLine("|____________________________________________________________________________________________|");
             Console.WriteLine();
-            Console.ForegroundColor= ConsoleColor.Red;
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Aperte Enter para jogar: ");
             Console.ReadLine();
             Console.ForegroundColor = ConsoleColor.Green;
+        }
+
+        public static void PlayerShootAlert(Board board, Position playerShoot, bool hit, string player)
+        {
+            Console.Clear();
+            board.PrintShootBoard();
+            Console.WriteLine("{0} atirou na posição: ['{1}':{2}]", player, ConvertPosition(playerShoot.Column), playerShoot.Line + 1);
+            if (hit) PrintAlert("Acertou o navio!", 'R');
+            else PrintAlert("Acertou na água!", 'R');
+
+            Console.WriteLine("Aperte ENTER para continuar");
+            Console.ReadLine();
+        }
+
+        public static void MachineShootAlert(Board board, Position machineShoot, bool hit)
+        {
+            Console.Clear();
+            board.PrintShootBoard();
+            Console.WriteLine("Máquina atirou na posição: ['{0}':{1}]", ConvertPosition(machineShoot.Column), machineShoot.Line + 1);
+            if (hit) PrintAlert("Acertou o navio!", 'R');
+            else PrintAlert("Acertou na água!", 'R');
+
+            Console.WriteLine("Aperte ENTER para continuar");
+            Console.ReadLine();
+        }
+
+        public static char ConvertPosition (int pos)
+        {
+            return (char)((int)'A' + pos);
         }
     }
 }

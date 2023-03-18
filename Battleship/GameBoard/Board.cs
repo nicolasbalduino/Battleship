@@ -253,6 +253,15 @@ namespace Battleship.GameBoard
             return true;
         }
 
+        public bool VerifyShootPosition(Position pos)
+        {
+            if (pos.Line < 0 || pos.Line >= board.GetLength(0)) return false;
+            if (pos.Column < 0 || pos.Column >= board.GetLength(1)) return false;
+
+            if (board[pos.Line, pos.Column] is not Shoot) return true;
+            return false;
+        }
+
         public void ShipSunked (Piece ShipSunk)
         {
             for (int i = 0; i < SunkenShips.Length; i++)
