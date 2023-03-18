@@ -143,28 +143,26 @@ namespace Battleship
 
         public static Position Coordenates()
         {
-            Console.Write("Informe a coluna de posicionamento: ");
-            // Tenta converter coordenada da coluna para caractere
-            string columnString = Console.ReadLine();
-            if (!char.TryParse(columnString, out char coordinateY))
+            Console.Write("\nDigite uma coordenada no formato Coluna Linha (Ex: A1): ");
+            string coordinate = Console.ReadLine().ToUpper();
+
+            if (coordinate.Length < 2 || coordinate.Length > 3)
             {
                 PrintError("Coordenada inválida, aperte qualquer tecla para tentar novamente");
                 return null;
             }
-            Thread.Sleep(100);
 
-            Console.Write("Informe a linha de posicionamento: ");
-            // Tenta converter coordenada da linha para inteiro
-            string lineString = Console.ReadLine();
-            if (!int.TryParse(lineString, out int coordinateX))
+            char coordinateY = coordinate[0];
+
+            bool isNumber = int.TryParse(coordinate.Replace(coordinateY, ' '), out int coordinateX);
+
+            if (!char.IsLetter(coordinateY) || !isNumber)
             {
                 PrintError("Coordenada inválida, aperte qualquer tecla para tentar novamente");
                 return null;
             }
-            Thread.Sleep(100);
 
-            // Cria uma nova posição, com X e Y convertidos corretamente
-            Position pos = new Position(coordinateX, char.ToUpper(coordinateY));
+            Position pos = new Position(coordinateX, coordinateY);
             return pos;
         }
 
