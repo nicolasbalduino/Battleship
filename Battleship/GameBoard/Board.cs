@@ -22,22 +22,36 @@ namespace Battleship.GameBoard
         public void PrintBoard ()
         {
             ConsoleColor aux = Console.ForegroundColor;
+
+            // Adiciona as letras das colunas
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("   |");
             for (int i = 0; i < Columns; i++)
             {
                 Console.Write(" {0} |", Letters[i]);
             }
+            Console.ForegroundColor = aux;
+
+            // Impressão do tabuleiro
             Console.Write("\n" + new string('-', 4 * (Lines + 1)));
             for (int line = 0; line < board.GetLength(0); line++)
             {
-                Console.Write("\n" + (line + 1).ToString("D2") + " | ");
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("\n" + (line + 1).ToString("D2"));
+                Console.ForegroundColor = aux;
+                Console.Write(" | ");
+
                 for (int column = 0; column < board.GetLength(1); column++)
                 {
-                    // Verifica se não há nada na posição
+                    // Troca cores de acordo com o tipo de peça
                     if (board[line, column] is ShipBorder) Console.ForegroundColor = ConsoleColor.DarkBlue;
-                    if (board[line, column] == null)
-                        Console.Write(" ");
+                    if (board[line, column] is Ship) Console.ForegroundColor = ConsoleColor.White;
+
+                    // Verifica se há algo na posição
+                    if (board[line, column] == null) Console.Write(" ");
                     else Console.Write(board[line, column]);
+
                     Console.ForegroundColor = aux;
                     Console.Write(" | ");
                 }
@@ -52,17 +66,26 @@ namespace Battleship.GameBoard
             // Armazena as cores padrões de plano de fundo e principal
             ConsoleColor aux = Console.ForegroundColor;
             ConsoleColor auxB = Console.BackgroundColor;
+
+            // Adiciona as letras das colunas
+            Console.ForegroundColor = ConsoleColor.Red;
             Console.Write("   |");
             for (int i = 0; i < Columns; i++)
             {
                 Console.Write(" {0} |", Letters[i]);
             }
+            Console.ForegroundColor = aux;
 
+            // Impressão do tabuleiro
             Console.Write("\n" + new string('-', 4 * (Lines + 1)));
-
             for (int line = 0; line < board.GetLength(0); line++)
             {
-                Console.Write("\n" + (line + 1).ToString("D2") + " | ");
+
+                Console.ForegroundColor = ConsoleColor.Red;
+                Console.Write("\n" + (line + 1).ToString("D2"));
+                Console.ForegroundColor = aux;
+                Console.Write(" |");
+
                 for (int column = 0; column < board.GetLength(1); column++)
                 {
                     Piece piece = board[line, column];
@@ -71,7 +94,7 @@ namespace Battleship.GameBoard
                     if (piece is Shoot && piece.Overlap is Ship)
                     {
                         Console.ForegroundColor = ConsoleColor.Red;
-                        Console.Write("X");
+                        Console.Write(" X ");
                         Console.ForegroundColor = aux;
                     }
 
@@ -79,14 +102,14 @@ namespace Battleship.GameBoard
                     if (piece is Shoot && piece.Overlap == null)
                     {
                         Console.BackgroundColor = ConsoleColor.Blue;
-                        Console.Write(" ");
+                        Console.Write("   ");
                         Console.BackgroundColor = auxB;
                     }
 
                     // Oculta navios
-                    if (piece is not Shoot) Console.Write(" ");
+                    if (piece is not Shoot) Console.Write("   ");
 
-                    Console.Write(" | ");
+                    Console.Write("|");
                 }
 
                 Console.Write("\n" + new string('-', 4 * (Lines + 1)));

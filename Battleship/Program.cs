@@ -317,10 +317,9 @@ namespace Battleship
             Console.WriteLine("|____________________________________________________________________________________________|");
             Console.WriteLine();
             Console.ForegroundColor= ConsoleColor.Red;
-            Console.WriteLine("Aperte Enter para jogar_ ");
+            Console.WriteLine("Aperte Enter para jogar: ");
             Console.ReadLine();
             Console.ForegroundColor = ConsoleColor.Green;
-
         }
     }
 }
