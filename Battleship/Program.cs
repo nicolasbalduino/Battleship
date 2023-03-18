@@ -181,7 +181,7 @@ namespace Battleship
             {
                 Console.Clear();
                 board.PrintBoard();
-                Console.WriteLine("{0} | Peça atual: {1} | Espaços de ocupação: {2}", playerName, piece.PieceName, piece.Size);
+                Console.WriteLine("{0} | Peça atual: {1} | Tamanho da embarcação: {2}", playerName, piece.PieceName, piece.Size);
                 pos = Coordenates();
             } while (pos == null);
 
