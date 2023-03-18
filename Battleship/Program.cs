@@ -162,6 +162,12 @@ namespace Battleship
                 return null;
             }
 
+            if ((coordinateY - 'A' > 19) || (coordinateX < 1 || coordinateX > 20))
+            {
+                PrintError("Coordenada inválida, aperte qualquer tecla para tentar novamente");
+                return null;
+            }
+
             Position pos = new Position(coordinateX, coordinateY);
             return pos;
         }
