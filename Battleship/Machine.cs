@@ -34,7 +34,7 @@ namespace Battleship
 
                 // Verifica se posicionamento está correto e insere as peças
                 valid = Board.InsertPiece(piece, pos, direction);
-            } while (valid);
+            } while (!valid);
         }
 
         public List<Position> Proximity (Position machineShoot)
