@@ -11,8 +11,8 @@ namespace Battleship
             GamePresents();
 
             // Declaração de variáveis
-            Board allyBoard = new(10, 10);
-            Board enemyBoard = new(10, 10);
+            Board allyBoard = new(20, 20);
+            Board enemyBoard = new(20, 20);
             Ship[] allyPieces = { new Destroyer(), new Submarine(), new AircraftCarrier() };
             Ship[] enemyPieces = { new Destroyer(), new Submarine(), new AircraftCarrier() };
             Machine machine = new(enemyBoard, allyBoard);
@@ -110,10 +110,6 @@ namespace Battleship
                 {
                     machine.PlaceShip(enemyPieces[i]);
                 }
-
-                enemyBoard.PrintBoard();
-                Console.Write("Deseja reposicionar? S para reposicionar | Qualquer outra letra para continuar: ");
-                Console.ReadKey();
             }
 
             // Início do jogo
