@@ -63,21 +63,22 @@ namespace Battleship
         public bool PlaceShoot(out Position machineShoot)
         {
             Position pos;
-
-            // Verifica cada posição do tabuleiro a procura de tiros anteriores
-            pos = VerifyBoard();
-
-            // Se não houver posições possiveís, escolhe uma aleatóra
-            if (pos == null) pos = Coordinates();
-
+            bool valid = false;
             Shoot shoot = new Shoot();
 
-            // Tenta enviar o tiro no tabuleiro
-            if (!EnemyBoard.InsertShoot(shoot, pos))
+            do
             {
-                PlaceShoot(out machineShoot);
-                return false;
-            }
+                // Verifica cada posição do tabuleiro a procura de tiros anteriores
+                pos = VerifyBoard();
+
+                // Se não houver posições possiveís, escolhe uma aleatóra
+                if (pos == null) pos = Coordinates();
+
+
+                // Tenta enviar o tiro no tabuleiro
+                valid = EnemyBoard.InsertShoot(shoot, pos);
+            } while (!valid);
+            
             machineShoot = pos;
 
             // Caso haja acerto, armazena em uma lista

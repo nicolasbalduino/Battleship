@@ -11,8 +11,8 @@ namespace Battleship
             GamePresents();
 
             // Declaração de variáveis
-            Board allyBoard = new(20, 20);
-            Board enemyBoard = new(20, 20);
+            Board allyBoard = new(10, 10);
+            Board enemyBoard = new(10, 10);
             Ship[] allyPieces = { new Destroyer(), new Submarine(), new AircraftCarrier() };
             Ship[] enemyPieces = { new Destroyer(), new Submarine(), new AircraftCarrier() };
             Machine machine = new(enemyBoard, allyBoard);

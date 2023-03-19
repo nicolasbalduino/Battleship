@@ -254,6 +254,7 @@ namespace Battleship.GameBoard
             return true;
         }
 
+        // Verifica se a posição de tiro é valida
         public bool VerifyShootPosition(Position pos)
         {
             if (pos.Line < 0 || pos.Line >= board.GetLength(0)) return false;
@@ -264,6 +265,7 @@ namespace Battleship.GameBoard
             return true;
         }
 
+        // Verifica se na posição já contém tiros
         public bool ContainsShoot(Position pos)
         {
             if (pos.Line < 0 || pos.Line >= board.GetLength(0)) return true;
@@ -273,6 +275,7 @@ namespace Battleship.GameBoard
             return false;
         }
 
+        // Armazena os navios afundados
         public void ShipSunked (Piece ShipSunk)
         {
             for (int i = 0; i < SunkenShips.Length; i++)
@@ -285,6 +288,7 @@ namespace Battleship.GameBoard
             }
         }
 
+        // Reseta o tabuleiro
         public void ClearBoard()
         {
             board = new Piece[Lines, Columns];
