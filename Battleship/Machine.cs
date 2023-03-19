@@ -32,64 +32,7 @@ namespace Battleship
             if (!Board.InsertPiece(piece, pos, direction)) PlaceShip(piece);
         }
 
-        public bool PlaceRandomShoot(out Position machineShoot)
-        {
-            // Insere um tiro em uma coordenada
-            Shoot shoot = new Shoot();
-            Position pos = Coordinates();
-            if (!EnemyBoard.InsertShoot(shoot, pos)) PlaceRandomShoot(out machineShoot);
-
-            // Armazena o local do tiro
-            ShootedPositions.Add(pos);
-            machineShoot = pos;
-
-            // Verifica se acertou em alguma peça
-            if (shoot.Overlap != null) return true;
-            return false;
-        }
-
-        public bool PlaceProximityShoot(ref Position machineShoot)
-        {
-            // Utiliza o resultado do random para escolha de posicionamento do próximo tiro
-            Position pos = ProximityShoot(machineShoot);
-
-            // Insere posição aleatória caso já não haja uma
-            if (pos == null) pos = Coordinates();
-
-            // Insere um tiro em uma coordenada calculada
-            Shoot shoot = new Shoot();
-            if (!EnemyBoard.InsertShoot(shoot, pos)) PlaceProximityShoot(ref machineShoot);
-
-            // Armazena o local do tiro
-            ShootedPositions.Add(pos);
-            machineShoot = pos;
-
-            // Verifica se acertou em alguma peça
-            if (shoot.Overlap != null) return true;
-            return false;
-        }
-
-        public bool PlaceSequentialShoot(ref Position machineShoot)
-        {
-            Position pos = SequentialShoot(machineShoot);
-
-            // Insere posição aleatória caso já não haja uma
-            if (pos == null) pos = Coordinates();
-
-            // Insere um tiro em uma coordenada sequencial
-            Shoot shoot = new Shoot();
-            if (!EnemyBoard.InsertShoot(shoot, pos)) PlaceProximityShoot(ref machineShoot);
-
-            // Armazena o local do tiro
-            ShootedPositions.Add(pos);
-            machineShoot = pos;
-
-            // Verifica se acertou em alguma peça
-            if (shoot.Overlap != null) return true;
-            return false;
-        }
-
-        public Position ProximityShoot(Position machineShoot)
+        public List<Position> Proximity (Position machineShoot)
         {
             List<Position> VerifyProximityShoot = new List<Position>();
             Position pos;
@@ -107,52 +50,87 @@ namespace Battleship
             pos = new Position(machineShoot.Line + 1, machineShoot.Column);
             if (EnemyBoard.VerifyShootPosition(pos)) VerifyProximityShoot.Add(pos);
 
-            // Caso lista esteja vazia, retorna uma posição aleatória do tabuleiro
             if (VerifyProximityShoot.Count == 0) return null;
 
-            // Escolhe uma posição aleatória da lista
-            int position = rdn.Next(VerifyProximityShoot.Count);
+            return VerifyProximityShoot;
+        }
 
-            return VerifyProximityShoot[position];
+        public bool PlaceShoot(out Position machineShoot)
+        {
+            Position pos;
+
+            // Verifica cada posição do tabuleiro a procura de tiros anteriores
+            pos = VerifyBoard();
+
+            // Se não houver posições possiveís, escolhe uma aleatóra
+            if (pos == null) pos = Coordinates();
+
+            Shoot shoot = new Shoot();
+
+            // Tenta enviar o tiro no tabuleiro
+            if (!EnemyBoard.InsertShoot(shoot, pos))
+            {
+                PlaceShoot(out machineShoot);
+                return false;
+            }
+            machineShoot = pos;
+
+            // Caso haja acerto, armazena em uma lista
+            if (shoot.Overlap != null)
+            {
+                ShootedPositions.Add(pos);
+                return true;
+            }
+
+            return false;
         }
 
         public Position SequentialShoot(Position machineShoot)
         {
-            int line, column;
-            Position pos;
+            // Verifica se existe possibilidades de tiro ao redor
+            List<Position> proximityShoots = Proximity(machineShoot);
 
-            // Procura a próxima linha e coluna da sequência
-            line = (ShootedPositions.Last().Line - ShootedPositions[ShootedPositions.Count - 2].Line);
-            column = (ShootedPositions.Last().Column - ShootedPositions[ShootedPositions.Count - 2].Column);
+            Position pos = null;
 
-            // Calcula a posição
-            pos = new Position(machineShoot.Line + line, machineShoot.Column + column);
+            // Verifica cada posição de tiro
+            for (int i = 0; i < proximityShoots.Count; i++)
+            {
+                int line = proximityShoots[i].Line;
+                int column = proximityShoots[i].Column;
 
-            // Envia posição caso válida
-            if (EnemyBoard.VerifyShootPosition(pos)) return pos;
+                // Se houver outro tiro ao redor, armazenar posição
+                if (EnemyBoard.board[line, column] is Shoot && EnemyBoard.board[line, column].Overlap != null)
+                {
+                    pos = new Position(line, column);
+                    break;
+                }
+            }
 
-            // Caso inválida, faz processo inverso de procura
-            line = (ShootedPositions[ShootedPositions.Count - 2].Line - ShootedPositions.Last().Line);
-            column = (ShootedPositions[ShootedPositions.Count - 2].Column - ShootedPositions.Last().Column);
+            // Se não houver tiros certeiros ao redor, atirar em qualquer posição ao redor
+            if (pos == null)
+            {
+                int position = rdn.Next(proximityShoots.Count);
+                return proximityShoots[position];
+            }
 
-            // Calcula a posição
-            pos = new Position(ShootedPositions[ShootedPositions.Count - 2].Line + line, ShootedPositions[ShootedPositions.Count - 2].Column + column);
+            // Armazenar diferença entre posição atual e a do tiro ao redor
+            int shootLine = machineShoot.Line - pos.Line;
+            int shootColumn = machineShoot.Column - pos.Column;
 
-            // Envia posição caso válida
-            if (EnemyBoard.VerifyShootPosition(pos)) return pos;
+            // Posicionamento de tiro sequencial
+            Position shootPosition = new Position(machineShoot.Line + shootLine, machineShoot.Column + shootColumn);
 
-            // Caso inválida, retorna null
-            return null;
+            // Retornar posição caso seja válida, caso contrário, retorna null
+            if (!EnemyBoard.VerifyShootPosition(pos)) return null;
+            if (EnemyBoard.ContainsShoot(shootPosition)) return null;
+            return shootPosition;
+
         }
 
         public Position Coordinates()
         {
+            // Retorna uma coordenada aleatória
             Position pos;
-            // Verifica se há tiros no tabuleiro
-            pos = VerifyBoard();
-            if (pos != null) return pos;
-
-            // Caso não haja tiros, realiza o tiro em uma posição aleatória
             int coordinateX = rdn.Next(Board.Lines);
             int coordinateY = rdn.Next(Board.Columns);
             pos = new Position(coordinateX, coordinateY);
@@ -165,20 +143,11 @@ namespace Battleship
             // Verifica se há tiros no tabuleiro
             for (int i = 0; i < ShootedPositions.Count(); i++)
             {
-                // Caso contenha tiros acertados, verifica se há posições ao redor e as envia
-                if (EnemyBoard.board[ShootedPositions[i].Line, ShootedPositions[i].Column].Overlap != null) return ProximityShoot(ShootedPositions[i]);
+                pos = SequentialShoot(ShootedPositions[i]);
+                if (pos != null) return pos;
             }
 
             return null;
-        }
-
-        public int AllShootedPositions()
-        {
-            int count = 0;
-            for (int i = 0; i < ShootedPositions.Count(); i++) {
-                if (EnemyBoard.board[ShootedPositions[i].Line, ShootedPositions[i].Column].Overlap != null) count++;
-            }
-            return count;
         }
     }
 }

@@ -139,45 +139,19 @@ namespace Battleship
                 }
 
                 // Jogador 2
-                if (gameMode == 1)
+                do
                 {
-                    do
-                    {
-                        hit = PlaceShoot(new Shoot(), allyBoard, player2);
-                        if (hit) enemyShoot++;
-                    } while (hit && enemyShoot < 9);
-                }
-
-                // Máquina
-                else
-                {
-                    do
+                    if (gameMode == 1) hit = PlaceShoot(new Shoot(), allyBoard, player2);
+                    else
                     {
                         Position machineShoot;
-                        hit = machine.PlaceRandomShoot(out machineShoot);
-
+                        hit = machine.PlaceShoot(out machineShoot);
                         Console.Clear();
                         MachineShootAlert(allyBoard, machineShoot, hit);
+                    }
 
-                        if (hit)
-                        {
-                            if (machine.AllShootedPositions() == 9) break;
-                            Console.Clear();
-                            hit = machine.PlaceProximityShoot(ref machineShoot);
-
-                            MachineShootAlert(allyBoard, machineShoot, hit);
-
-                            // Caso acerte novamente, máquina realizara tiros sequenciais
-                            while (hit)
-                            {
-                                if (machine.AllShootedPositions() == 9) break;
-                                hit = machine.PlaceSequentialShoot(ref machineShoot);
-                                MachineShootAlert(allyBoard, machineShoot, hit);
-                            }
-                        }
-                        if (machine.AllShootedPositions() == 9) break;
-                    } while (hit);
-                }
+                    if (hit) enemyShoot++;
+                } while (hit && enemyShoot < 9);
 
                 // Verifica se todas as peças foram acertadas
                 if (enemyShoot == 9)

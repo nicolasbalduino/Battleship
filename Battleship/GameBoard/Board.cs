@@ -258,7 +258,17 @@ namespace Battleship.GameBoard
             if (pos.Line < 0 || pos.Line >= board.GetLength(0)) return false;
             if (pos.Column < 0 || pos.Column >= board.GetLength(1)) return false;
 
-            if (board[pos.Line, pos.Column] is not Shoot) return true;
+            if (board[pos.Line, pos.Column] is Shoot && board[pos.Line, pos.Column].Overlap == null) return false;
+
+            return true;
+        }
+
+        public bool ContainsShoot(Position pos)
+        {
+            if (pos.Line < 0 || pos.Line >= board.GetLength(0)) return true;
+            if (pos.Column < 0 || pos.Column >= board.GetLength(1)) return true;
+
+            if (board[pos.Line, pos.Column] is Shoot) return true;
             return false;
         }
 
