@@ -165,25 +165,30 @@ namespace Battleship
 
         public static Position Coordinates()
         {
-            Console.Write("Informe a coluna de posicionamento: ");
-            // Tenta converter coordenada da coluna para caractere
-            string columnString = Console.ReadLine();
-            if (!char.TryParse(columnString, out char coordinateY))
-            {
-                PrintError("Coordenada inválida, aperte qualquer tecla para tentar novamente");
-                return null;
-            }
-            Thread.Sleep(100);
+            Console.Write("\nDigite uma coordenada no formato Coluna Linha (Ex: A1): ");
+            string coordinate = Console.ReadLine().ToUpper();
 
-            Console.Write("Informe a linha de posicionamento: ");
-            // Tenta converter coordenada da linha para inteiro
-            string lineString = Console.ReadLine();
-            if (!int.TryParse(lineString, out int coordinateX))
+            if (coordinate.Length < 2 || coordinate.Length > 3)
             {
                 PrintError("Coordenada inválida, aperte qualquer tecla para tentar novamente");
                 return null;
             }
-            Thread.Sleep(100);
+
+            char coordinateY = coordinate[0];
+
+            bool isNumber = int.TryParse(coordinate.Replace(coordinateY, ' '), out int coordinateX);
+
+            if (!char.IsLetter(coordinateY) || !isNumber)
+            {
+                PrintError("Coordenada inválida, aperte qualquer tecla para tentar novamente");
+                return null;
+            }
+
+            if ((coordinateY - 'A' > 19) || (coordinateX < 1 || coordinateX > 20))
+            {
+                PrintError("Coordenada inválida, aperte qualquer tecla para tentar novamente");
+                return null;
+            }
 
             // Cria uma nova posição, com X e Y convertidos corretamente
             Position pos = new Position(coordinateX - 1, ((int)char.ToUpperInvariant(coordinateY) - 'A'));
@@ -199,7 +204,7 @@ namespace Battleship
             {
                 Console.Clear();
                 board.PrintBoard();
-                Console.WriteLine("{0} | Peça atual: {1} | Espaços de ocupação: {2}", playerName, piece.PieceName, piece.Size);
+                Console.WriteLine("{0} | Peça atual: {1} | Tamanho da embarcação: {2}", playerName, piece.PieceName, piece.Size);
                 pos = Coordinates();
             } while (pos == null);
 
