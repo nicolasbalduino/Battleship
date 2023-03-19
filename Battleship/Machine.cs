@@ -20,16 +20,21 @@ namespace Battleship
 
         public void PlaceShip(Ship piece)
         {
-            // Adiciona peças em coordenadas aleatórias do tabuleiro
-            Position pos = Coordinates();
+            bool valid = false;
+            do
+            {
 
-            // Escolhe aleatóriamente uma direção
-            char direction;
-            if (rdn.Next(2) == 1) direction = 'H';
-            else direction = 'V';
+                // Adiciona peças em coordenadas aleatórias do tabuleiro
+                Position pos = Coordinates();
 
-            // Verifica se posicionamento está correto e insere as peças
-            if (!Board.InsertPiece(piece, pos, direction)) PlaceShip(piece);
+                // Escolhe aleatóriamente uma direção
+                char direction;
+                if (rdn.Next(2) == 1) direction = 'H';
+                else direction = 'V';
+
+                // Verifica se posicionamento está correto e insere as peças
+                valid = Board.InsertPiece(piece, pos, direction);
+            } while (valid);
         }
 
         public List<Position> Proximity (Position machineShoot)
