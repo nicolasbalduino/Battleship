@@ -16,7 +16,7 @@ namespace Battleship
             Ship[] allyPieces = { new Submarine(), new Destroyer(), new AircraftCarrier() };
             Ship[] enemyPieces = { new Submarine(), new Destroyer(), new AircraftCarrier() };
             Machine machine = new(enemyBoard, allyBoard);
-            bool reposicionar;
+            bool reposition;
 
             // Escolha de modo de jogo
             int gameMode = 0;
@@ -67,11 +67,11 @@ namespace Battleship
                 string opc = Console.ReadLine().Trim();
                 if (opc == "S" || opc == "s")
                 {
-                    reposicionar = true;
+                    reposition = true;
                     allyBoard.ClearBoard();
                 }
-                else reposicionar = false;
-            } while (reposicionar);
+                else reposition = false;
+            } while (reposition);
 
             Console.Clear();
 
@@ -96,11 +96,11 @@ namespace Battleship
                     string opc = Console.ReadLine().Trim();
                     if (opc == "S" || opc == "s")
                     {
-                        reposicionar = true;
+                        reposition = true;
                         enemyBoard.ClearBoard();
                     }
-                    else reposicionar = false;
-                } while (reposicionar);
+                    else reposition = false;
+                } while (reposition);
             }
 
             else
