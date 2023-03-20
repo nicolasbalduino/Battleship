@@ -13,8 +13,8 @@ namespace Battleship
             // Declaração de variáveis
             Board allyBoard = new(20, 20);
             Board enemyBoard = new(20, 20);
-            Ship[] allyPieces = { new Destroyer(), new Submarine(), new AircraftCarrier() };
-            Ship[] enemyPieces = { new Destroyer(), new Submarine(), new AircraftCarrier() };
+            Ship[] allyPieces = { new Submarine(), new Destroyer(), new AircraftCarrier() };
+            Ship[] enemyPieces = { new Submarine(), new Destroyer(), new AircraftCarrier() };
             Machine machine = new(enemyBoard, allyBoard);
             bool reposicionar;
 
@@ -34,11 +34,19 @@ namespace Battleship
 
             Console.Write("Jogador 1, Informe seu nome: ");
             player1 = Console.ReadLine();
+            if (player1.Trim() == "")
+            {
+                player1 = "Player 1";
+            }
 
             if (gameMode == 1)
             {
                 Console.Write("Jogador 2, Informe seu nome: ");
                 player2 = Console.ReadLine();
+                if (player2.Trim() == "")
+                {
+                    player2 = "Player 2";
+                }
             }
             else player2 = "Maquina";
 
@@ -293,30 +301,30 @@ namespace Battleship
         public static void GamePresents()
         {
             Console.ForegroundColor = ConsoleColor.Green;
-            Console.WriteLine("_____________________________________________________________________________________________");
-            Console.WriteLine("|                                                                                            |");
-            Console.WriteLine("|    BBBBB     AAA   TTTTTTTT  TTTTTTTT  LL     EEEEEEE  SSSSSS  HH   HH  IIII  PPPPPP       |");
-            Console.WriteLine("|    BB   B   AAAAA     TT        TT     LL     EE      SS       HH   HH   II   PP   PP      |");
-            Console.WriteLine("|    BBBBB   AA   AA    TT        TT     LL     EEEEE    SSSSS   HHHHHHH   II   PPPPPP       |");
-            Console.WriteLine("|    BB   B AAAAAAAAA   TT        TT     LL     EE           SS  HH   HH   II   PP           |");
-            Console.WriteLine("|    BBBBB   AA   AA    TT        TT     LLLLLL EEEEEEE  SSSSSS  HH   HH  IIII  PP           |");
-            Console.WriteLine("|____________________________________________________________________________________________|");
-            Console.WriteLine("|                                                                                            |");
-            Console.WriteLine("|                                                                                            |");
-            Console.WriteLine("|                                                                                            |");
-            Console.WriteLine("|                                                                                            |");
-            Console.WriteLine("|                                                                                            |");
-            Console.WriteLine("|                                                                                            |");
-            Console.WriteLine("|                                                                                            |");
-            Console.WriteLine("|                                                                                            |");
-            Console.WriteLine("|             ___|00000|===__                                     __===|00000|___            |");
-            Console.WriteLine("|            \\__º__º__º__º__/                                    \\__º__º__º__º__/            |");
-            Console.WriteLine("| ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~  |");
-            Console.WriteLine("|                                                                                            |");
-            Console.WriteLine("|                        ____|0|__                             __|0|____                     |");
-            Console.WriteLine("|                     x=(_________)                           (_________)=x                  |");
-            Console.WriteLine("|                                                                                            |");
-            Console.WriteLine("|____________________________________________________________________________________________|");
+            Console.WriteLine("_______________________________________________________________________________________________________");
+            Console.WriteLine("|                                                                                                     |");
+            Console.WriteLine("|    BBBBB       AAA      TTTTTTTT  TTTTTTTT  LL      EEEEEEE  SSSSSSS  HH   HH  IIIIII  PPPPPPP      |");
+            Console.WriteLine("|    BB  BB     AAAAA        TT        TT     LL      EE       SS       HH   HH    II    PP   PP      |");
+            Console.WriteLine("|    BBBBB     AA   AA       TT        TT     LL      EEEEEEE  SSSSSSS  HHHHHHH    II    PPPPPPP      |");
+            Console.WriteLine("|    BB  BB   AAAAAAAAA      TT        TT     LL      EE            SS  HH   HH    II    PP           |");
+            Console.WriteLine("|    BBBBB   AAA     AAA     TT        TT     LLLLLL  EEEEEEE  SSSSSSS  HH   HH  IIIIII  PP           |");
+            Console.WriteLine("|_____________________________________________________________________________________________________|");
+            Console.WriteLine("|                                                                                                     |");
+            Console.WriteLine("|                                                                                                     |");
+            Console.WriteLine("|                                                                                                     |");
+            Console.WriteLine("|                                                                                                     |");
+            Console.WriteLine("|                                                                                                     |");
+            Console.WriteLine("|                                                                                                     |");
+            Console.WriteLine("|                                                                                                     |");
+            Console.WriteLine("|                                                                                                     |");
+            Console.WriteLine("|            ____|00000|===___                                   ____===|00000|___                    |");
+            Console.WriteLine("|            \\__º__º__º__º__//                                   \\__º__º__º__º__//                    |");
+            Console.WriteLine("|~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~|");
+            Console.WriteLine("|                                                                                                     |");
+            Console.WriteLine("|                        ____|0|__                             __|0|____                              |");
+            Console.WriteLine("|                     x=(_________)                           (_________)=x                           |");
+            Console.WriteLine("|                                                                                                     |");
+            Console.WriteLine("|_____________________________________________________________________________________________________|");
             Console.WriteLine();
             Console.ForegroundColor = ConsoleColor.Red;
             Console.WriteLine("Aperte Enter para jogar: ");

@@ -6,7 +6,7 @@ namespace Battleship.Pieces
     {
         public Submarine() {
             PieceName = "Submarine";
-            Size = 3;
+            Size = 2;
         }
 
         public override string ToString()
