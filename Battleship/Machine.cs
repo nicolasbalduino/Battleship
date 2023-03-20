@@ -20,16 +20,21 @@ namespace Battleship
 
         public void PlaceShip(Ship piece)
         {
-            // Adiciona peças em coordenadas aleatórias do tabuleiro
-            Position pos = Coordinates();
+            bool valid = false;
+            do
+            {
 
-            // Escolhe aleatóriamente uma direção
-            char direction;
-            if (rdn.Next(2) == 1) direction = 'H';
-            else direction = 'V';
+                // Adiciona peças em coordenadas aleatórias do tabuleiro
+                Position pos = Coordinates();
 
-            // Verifica se posicionamento está correto e insere as peças
-            if (!Board.InsertPiece(piece, pos, direction)) PlaceShip(piece);
+                // Escolhe aleatóriamente uma direção
+                char direction;
+                if (rdn.Next(2) == 1) direction = 'H';
+                else direction = 'V';
+
+                // Verifica se posicionamento está correto e insere as peças
+                valid = Board.InsertPiece(piece, pos, direction);
+            } while (!valid);
         }
 
         public List<Position> Proximity (Position machineShoot)
@@ -58,21 +63,22 @@ namespace Battleship
         public bool PlaceShoot(out Position machineShoot)
         {
             Position pos;
-
-            // Verifica cada posição do tabuleiro a procura de tiros anteriores
-            pos = VerifyBoard();
-
-            // Se não houver posições possiveís, escolhe uma aleatóra
-            if (pos == null) pos = Coordinates();
-
+            bool valid = false;
             Shoot shoot = new Shoot();
 
-            // Tenta enviar o tiro no tabuleiro
-            if (!EnemyBoard.InsertShoot(shoot, pos))
+            do
             {
-                PlaceShoot(out machineShoot);
-                return false;
-            }
+                // Verifica cada posição do tabuleiro a procura de tiros anteriores
+                pos = VerifyBoard();
+
+                // Se não houver posições possiveís, escolhe uma aleatóra
+                if (pos == null) pos = Coordinates();
+
+
+                // Tenta enviar o tiro no tabuleiro
+                valid = EnemyBoard.InsertShoot(shoot, pos);
+            } while (!valid);
+            
             machineShoot = pos;
 
             // Caso haja acerto, armazena em uma lista

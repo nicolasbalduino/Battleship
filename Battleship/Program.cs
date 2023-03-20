@@ -39,14 +39,13 @@ namespace Battleship
                 player1 = "Player 1";
             }
 
+            if (player1.Trim() == "") player1 = "Jogador 1";
+
             if (gameMode == 1)
             {
                 Console.Write("Jogador 2, Informe seu nome: ");
                 player2 = Console.ReadLine();
-                if (player2.Trim() == "")
-                {
-                    player2 = "Player 2";
-                }
+                if (player2.Trim() == "") player2 = "Jogador 2";
             }
             else player2 = "Maquina";
 
@@ -148,10 +147,10 @@ namespace Battleship
                     if (gameMode == 1) hit = PlaceShoot(new Shoot(), allyBoard, player2);
                     else
                     {
-                        Position machineShoot;
-                        hit = machine.PlaceShoot(out machineShoot);
-                        Console.Clear();
-                        MachineShootAlert(allyBoard, machineShoot, hit);
+                            Position machineShoot;
+                            hit = machine.PlaceShoot(out machineShoot);
+                            Console.Clear();
+                            MachineShootAlert(allyBoard, machineShoot, hit);
                     }
 
                     if (hit) enemyShoot++;
@@ -203,6 +202,7 @@ namespace Battleship
         public static void PlaceShip(Ship piece, Board board, string playerName)
         {
             Position pos;
+            bool valid = false;
 
             do
             {
@@ -210,23 +210,25 @@ namespace Battleship
                 board.PrintBoard();
                 Console.WriteLine("{0} | Peça atual: {1} | Tamanho da embarcação: {2}", playerName, piece.PieceName, piece.Size);
                 pos = Coordinates();
-            } while (pos == null);
-
-            Console.Write("Digite a direção de posicionamento (H - horizontal | V - vertical): ");
-            // Tenta converter direção para caractere
-            string directionString = Console.ReadLine();
-            if (!char.TryParse(directionString, out char direction))
-            {
-                PrintError("Direção inválida, aperte qualquer tecla para tentar novamente");
-                PlaceShip(piece, board, playerName);
-            }
-            Thread.Sleep(100);
-
-            if (!board.InsertPiece(piece, pos, char.ToUpper(direction)))
-            {
-                PrintError("Coordenada inválida, aperte qualquer tecla para tentar novamente");
-                PlaceShip(piece, board, playerName);
-            }
+                if (pos != null)
+                {
+                    Console.Write("Digite a direção de posicionamento (H - horizontal | V - vertical): ");
+                    // Tenta converter direção para caractere
+                    string directionString = Console.ReadLine();
+                    if (char.TryParse(directionString, out char direction))
+                    {
+                        valid = board.InsertPiece(piece, pos, char.ToUpper(direction));
+                        if (!valid)
+                        {
+                            PrintError("Coordenada inválida, aperte qualquer tecla para tentar novamente");
+                        }
+                    }
+                    else
+                    {
+                        PrintError("Direção inválida, aperte qualquer tecla para tentar novamente");
+                    }
+                }
+            } while (!valid);
         }
 
         // Posiciona o tiro no tabuleiro
