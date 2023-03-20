@@ -145,10 +145,10 @@ namespace Battleship
                     if (gameMode == 1) hit = PlaceShoot(new Shoot(), allyBoard, player2);
                     else
                     {
-                            Position machineShoot;
-                            hit = machine.PlaceShoot(out machineShoot);
-                            Console.Clear();
-                            MachineShootAlert(allyBoard, machineShoot, hit);
+                        Position machineShoot;
+                        hit = machine.PlaceShoot(out machineShoot);
+                        Console.Clear();
+                        MachineShootAlert(allyBoard, machineShoot, hit);
                     }
 
                     if (hit) enemyShoot++;
@@ -236,29 +236,31 @@ namespace Battleship
         public static bool PlaceShoot(Piece piece, Board board, string playerName)
         {
             Position pos;
+            bool valid = false;
             do
             {
-                Console.Clear();
-                board.PrintShootBoard();
 
-                // Imprime os navios afundados:
-                Console.Write("Navios afundados: ");
-                foreach (string ship in board.SunkenShips)
+                do
                 {
-                    Console.Write("{0} ", ship);
-                }
-                Console.WriteLine();
+                    Console.Clear();
+                    board.PrintShootBoard();
 
-                Console.WriteLine("{0} | Insira as coordenadas do tiro", playerName);
-                pos = Coordinates();
-            } while (pos == null);
+                    // Imprime os navios afundados:
+                    Console.Write("Navios afundados: ");
+                    foreach (string ship in board.SunkenShips)
+                    {
+                        Console.Write("{0} ", ship);
+                    }
+                    Console.WriteLine();
 
-            if (!board.InsertShoot(piece, pos))
-            {
-                PrintError("Coordenada inválida, tente novamente");
-                PlaceShoot(piece, board, playerName);
-                return false;
-            }
+                    Console.WriteLine("{0} | Insira as coordenadas do tiro", playerName);
+                    pos = Coordinates();
+                } while (pos == null);
+
+                valid = board.InsertShoot(piece, pos);
+                if (!valid) PrintError("Coordenada inválida, tente novamente");
+            } while (!valid);
+
 
             bool hit = piece.Overlap != null;
 
@@ -391,7 +393,7 @@ namespace Battleship
             Console.ReadLine();
         }
 
-        public static char ConvertPosition (int pos)
+        public static char ConvertPosition(int pos)
         {
             return (char)((int)'A' + pos);
         }
