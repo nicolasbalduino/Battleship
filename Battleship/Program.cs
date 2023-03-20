@@ -8,7 +8,6 @@ namespace Battleship
     {
         public static void Main(string[] args)
         {
-
             GamePresents();
             // Declaração de variáveis
             Board allyBoard = new(20, 20);
@@ -139,6 +138,7 @@ namespace Battleship
                     break;
                 }
             } while (true);
+            Credits();
         }
 
         public static Position Coordenates()
@@ -270,13 +270,21 @@ namespace Battleship
         public static void Credits()
         {
             // Frescures
+            Console.ForegroundColor = ConsoleColor.White;
             Console.CursorVisible = false;
             string[] credits = {
-                "Desenvolvido por: Seu nome aqui",
-                "Agradecimentos especiais: Fulano, Beltrano",
-                "Copyright © 2023"
+                "Obrigado por jogar!",
+                " ",
+                "Desenvolvedores:",
+                " ",
+                "Daniel Visicatto",
+                "Luis Guilherme Silva",
+                "Nicolas Antonio Balduino",
+                "Vinicius Picolo",
+                " ",
+                "Battleship IterAção 5by5 © 2023"
             };
-            int y = Console.WindowHeight;
+            int y = Console.WindowHeight - credits.Length;
             int x = Console.WindowWidth / 2;
             while (y >= 0)
             {
@@ -286,7 +294,7 @@ namespace Battleship
                     Console.SetCursorPosition(x - credits[i].Length / 2, y + i);
                     Console.Write(credits[i]);
                 }
-                Thread.Sleep(50);
+                Thread.Sleep(500);
                 y--;
             }
             Console.Clear();
