@@ -134,6 +134,8 @@ namespace Battleship
                 {
                     Console.Clear();
                     PrintAlert($"{player1} Venceu!", 'R');
+                    Console.WriteLine("\nPressione uma tecla para finalizar...");
+                    Console.ReadKey();
                     break;
                 }
 
@@ -157,9 +159,12 @@ namespace Battleship
                 {
                     Console.Clear();
                     PrintAlert($"{player2} Venceu!", 'R');
+                    Console.WriteLine("\nPressione uma tecla para finalizar...");
+                    Console.ReadKey();
                     break;
                 }
             } while (true);
+            Credits();
         }
 
         public static Position Coordinates()
@@ -328,6 +333,38 @@ namespace Battleship
             Console.WriteLine("Aperte Enter para jogar: ");
             Console.ReadLine();
             Console.ForegroundColor = ConsoleColor.Green;
+        }
+
+        public static void Credits()
+        {
+            Console.ForegroundColor = ConsoleColor.White;
+            Console.CursorVisible = false;
+            string[] credits = {
+                "Obrigado por jogar!",
+                " ",
+                "Desenvolvedores:",
+                " ",
+                "Daniel Visicatto",
+                "Luis Guilherme Silva",
+                "Nicolas Antonio Balduino",
+                "Vinicius Picolo",
+                " ",
+                "Battleship IterAção 5by5 © 2023"
+            };
+            int y = Console.WindowHeight - credits.Length;
+            int x = Console.WindowWidth / 2;
+            while (y >= 0)
+            {
+                Console.Clear();
+                for (int i = 0; i < credits.Length; i++)
+                {
+                    Console.SetCursorPosition(x - credits[i].Length / 2, y + i);
+                    Console.Write(credits[i]);
+                }
+                Thread.Sleep(500);
+                y--;
+            }
+            Console.Clear();
         }
 
         public static void PlayerShootAlert(Board board, Position playerShoot, bool hit, string player)
