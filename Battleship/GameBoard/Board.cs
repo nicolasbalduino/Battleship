@@ -245,7 +245,7 @@ namespace Battleship.GameBoard
             {
                 Ship shipShooted = ((Ship)piece.Overlap);
                 shipShooted.Size--;
-                if (shipShooted.Size == 0) ShipSunked(shipShooted);
+                if (shipShooted.Size == 0) ShipSunken(shipShooted);
             }
 
             // Insere a peça tiro
@@ -275,7 +275,7 @@ namespace Battleship.GameBoard
         }
 
         // Armazena os navios afundados
-        public void ShipSunked (Piece ShipSunk)
+        public void ShipSunken (Piece ShipSunk)
         {
             for (int i = 0; i < SunkenShips.Length; i++)
             {
