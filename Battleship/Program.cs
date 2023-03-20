@@ -34,10 +34,6 @@ namespace Battleship
 
             Console.Write("Jogador 1, Informe seu nome: ");
             player1 = Console.ReadLine();
-            if (player1.Trim() == "")
-            {
-                player1 = "Player 1";
-            }
 
             if (player1.Trim() == "") player1 = "Jogador 1";
 
@@ -68,7 +64,7 @@ namespace Battleship
                 allyBoard.PrintBoard();
 
                 Console.Write("Deseja reposicionar? S para reposicionar | Qualquer outra letra para continuar: ");
-                string opc = Console.ReadLine();
+                string opc = Console.ReadLine().Trim();
                 if (opc == "S" || opc == "s")
                 {
                     reposicionar = true;
@@ -97,7 +93,7 @@ namespace Battleship
                     enemyBoard.PrintBoard();
                     Console.Write("Deseja reposicionar? S para reposicionar | Qualquer outra letra para continuar: ");
 
-                    string opc = Console.ReadLine();
+                    string opc = Console.ReadLine().Trim();
                     if (opc == "S" || opc == "s")
                     {
                         reposicionar = true;
