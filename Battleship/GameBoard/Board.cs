@@ -1,5 +1,4 @@
-﻿using System.Linq;
-using Battleship.Pieces;
+﻿using Battleship.Pieces;
 
 namespace Battleship.GameBoard
 {
