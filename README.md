@@ -27,10 +27,10 @@ dotnet run
 ## O jogo
 
  - o Jogo se inicia com uma tela de apresentação simples onde o usuário pode apertar o Enter para começar a jogar.
- - ![Start Screen](C:\Users\adm\Desktop\AulaDeObjetos\ProjEmGrupo\Battleship\Images\Starting.png)
+ - ![Start Screen](https://github.com/nicolasbalduino/Battleship/blob/main/Battleship/Images/Starting.png)
 
  - Na tela a seguir o jogador podera escolher se jogará contra um adversário físoco ou contra a I.A.
- ![Players Selection](C:\Users\adm\Desktop\AulaDeObjetos\ProjEmGrupo\Battleship\Images\GameMode.png)
+ ![Players Selection](https://github.com/nicolasbalduino/Battleship/blob/main/Battleship/Images/GameMode.png)
  - Depois de coletados os dados do(s) jogador(es),  é exibido um tabuleiro para que se posicione as peças. A primeira peça a ser posicionada é o submarino que ocupa 2 posições no tabuleiro. O jogador deve posicioná-lo inserindo as coordenadas primeiro a coluna desejada e em seguida linha (Ex: A1). 
  - O programa irá perguntar se a peça deve ser colocada em posção Horizontal ou Vertical. Se por acaso a peça não couber na posição desejada o tabuleiro irá ajustar para que ocupe a posição aproximada.
  - Feito isso a peça posicionada é mostrada no tabuleiro com uma marcação em volta, já que não se pode colocar duas peças encostadas uma na outra. 
@@ -41,13 +41,13 @@ dotnet run
  - O objetivo do jogo em si é tentar acertar onde seu oponente seja I.A ou jogador inimigo, posicionou as peças dele.
  - Cada vez que um jogador acerta uma peça inimiga ele tem o dirteito de dar mais um tiro (inclusive a I.A).
  - Quando o tiro não acerta a posição de uma peça inimiga, é a vez do oponente e o lugar onde voce atirou fica marcado com um quadro azul indicativo de "tiro na agua", e vc preciona "Enter" para que o jogo continue
-![Acerto na Agua](C:\Users\adm\Desktop\AulaDeObjetos\ProjEmGrupo\Battleship\Images\Agua.png)
+![Acerto na Agua](https://github.com/nicolasbalduino/Battleship/blob/main/Battleship/Images/Agua.png)
   - Quando um navio é acertado é exibida a mensagem Acertou Navio!, após pressionar Enter joga-se de novo.
-![Acerto no Navio](C:\Users\adm\Desktop\AulaDeObjetos\ProjEmGrupo\Battleship\Images\Navio.png)
+![Acerto no Navio](https://github.com/nicolasbalduino/Battleship/blob/main/Battleship/Images/Navio.png)
  - Quando um dos jogadores atinge 100% dos navios do oponente o mapa é mostrado.
-![Endgame](C:\Users\adm\Desktop\AulaDeObjetos\ProjEmGrupo\Battleship\Images\Endgame.png)
+![Endgame](https://github.com/nicolasbalduino/Battleship/blob/main/Battleship/Images/Endgame.png)
  - O jogador vencedor é parabenizado e sobem os créditos.
-![Credits](C:\Users\adm\Desktop\AulaDeObjetos\ProjEmGrupo\Battleship\Images\Credits.png)
+![Credits](https://github.com/nicolasbalduino/Battleship/blob/main/Battleship/Images/Credits.png)
 ## Desenvolvimento
 
 Gostaria de ajudar a melhorar o projeto?
