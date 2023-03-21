@@ -1,65 +1,78 @@
-# Batalha Naval
-## Atividade desenvolvida em grupo para o projeto interação 5by5
+# BATTLESHIP
+## Activity developed in group for projeto interação 5by5
 
 <div>
   <img src="https://raw.githubusercontent.com/devicons/devicon/1119b9f84c0290e0f0b38982099a2bd027a48bf1/icons/csharp/csharp-plain.svg" title="CSharp" alt="Csharp" width="40" height="40"/>&nbsp;<img src="https://raw.githubusercontent.com/devicons/devicon/1119b9f84c0290e0f0b38982099a2bd027a48bf1/icons/visualstudio/visualstudio-plain.svg" title="VisualStudio" alt="VisualStudio" width="40" height="40"/>&nbsp;<img src="https://github.com/devicons/devicon/blob/master/icons/git/git-original-wordmark.svg" title="Git" **alt="Git" width="40" height="40"/>
   </div>
 
 
-## Requisitos
+## Requirements
 
-Batalha naval precisa da versão 6.0 do [.NET](https://dotnet.microsoft.com
-) para rodar.
+Battleship requires .NET 6.0 to run. [Install here](https://dotnet.microsoft.com/en-us/download/dotnet/6.0)
 
-Pa instalar as dependências use o comando a seguir.
+To install the dependencies use the command below.
 
 ```sh
 dotnet restore
 ```
 
-Use os seguintes comandos para abrir e rodar a aplicação.
+Use the commands below to open and run the application.
 
 ```sh
 dotnet build
 dotnet run
 ```
 
-## O jogo
+## Game Guide
 
- - o Jogo se inicia com uma tela de apresentação simples onde o usuário pode apertar o Enter para começar a jogar.
- - ![Start Screen](https://github.com/nicolasbalduino/Battleship/blob/main/Battleship/Images/Starting.png)
+- The game starts with a simple presentation screen where the user can press Enter to start playing.
+- ![Start Screen](https://github.com/nicolasbalduino/Battleship/blob/main/Battleship/Images/Starting.png)
 
- - Na tela a seguir o jogador podera escolher se jogará contra um adversário físoco ou contra a I.A.
+- On the next screen the player can choose whether to play against a physical opponent or against the machine.
  ![Players Selection](https://github.com/nicolasbalduino/Battleship/blob/main/Battleship/Images/GameMode.png)
- - Depois de coletados os dados do(s) jogador(es),  é exibido um tabuleiro para que se posicione as peças. A primeira peça a ser posicionada é o submarino que ocupa 2 posições no tabuleiro. O jogador deve posicioná-lo inserindo as coordenadas primeiro a coluna desejada e em seguida linha (Ex: A1). 
- - O programa irá perguntar se a peça deve ser colocada em posção Horizontal ou Vertical. Se por acaso a peça não couber na posição desejada o tabuleiro irá ajustar para que ocupe a posição aproximada.
- - Feito isso a peça posicionada é mostrada no tabuleiro com uma marcação em volta, já que não se pode colocar duas peças encostadas uma na outra. 
- - O procedimento se repete com o Destroyer e o Carrier, que ocupam 3 e 4 espaços respectivamente.
- - Ainda assim o programa oferece para que o jogador zere seu posicionamento e faça um novo.
- - Mesmo procedimento para o jogador 2.
- - No caso de I.A. obviamente o posicionamento não aparecerá na tela.
- - O objetivo do jogo em si é tentar acertar onde seu oponente seja I.A ou jogador inimigo, posicionou as peças dele.
- - Cada vez que um jogador acerta uma peça inimiga ele tem o dirteito de dar mais um tiro (inclusive a I.A).
- - Quando o tiro não acerta a posição de uma peça inimiga, é a vez do oponente e o lugar onde voce atirou fica marcado com um quadro azul indicativo de "tiro na agua", e vc preciona "Enter" para que o jogo continue
+ 
+- After collecting the data of the player(s), a board is displayed for positioning the pieces. The first piece to be positioned is the submarine that occupies 2 positions on the board. The player must position it by entering the coordinates first the desired column and then row (Ex: A1).
+ 
+- The program will ask if the piece should be placed in Horizontal or Vertical position. If by chance the piece does not fit in the desired position, the board will adjust to occupy an approximate position.
+
+- Once this is done, the positioned piece is shown on the board with a marking around it, since you cannot place two pieces next to each other.
+ 
+- The procedure is repeated with Destroyer and Carrier, which occupy 3 and 4 spaces respectively.
+- Still, the program offers for you to reset your positioning and make a new one.
+ 
+- Same procedure for player 2.
+
+- AI positioning will not appear on screen.
+
+- The objective of game itself is try hitting where your opponent whether AI or enemy player positioned his pieces.
+
+- Every time a player hits an enemy piece he has right to take another shot.
+
+- When shot does not hit position of an enemy piece, it’s opponent’s turn and the place where you shot gets marked with blue square, indicative of “Acerto na Agua!”, press “Enter” for game continue.
 ![Acerto na Agua](https://github.com/nicolasbalduino/Battleship/blob/main/Battleship/Images/Agua.png)
-  - Quando um navio é acertado é exibida a mensagem Acertou Navio!, após pressionar Enter joga-se de novo.
+
+ - When a ship is hit, the message "Acerto no Navio!" is displayed, after pressing Enter you play again.
 ![Acerto no Navio](https://github.com/nicolasbalduino/Battleship/blob/main/Battleship/Images/Navio.png)
- - Quando um dos jogadores atinge 100% dos navios do oponente o mapa é mostrado.
+
+ - When one of players hits 100% of opponent’s ships map is shown
 ![Endgame](https://github.com/nicolasbalduino/Battleship/blob/main/Battleship/Images/Endgame.png)
- - O jogador vencedor é parabenizado e sobem os créditos.
+
+ - The winning player is congratulated and credits go up.
 ![Credits](https://github.com/nicolasbalduino/Battleship/blob/main/Battleship/Images/Credits.png)
-## Desenvolvimento
 
-Gostaria de ajudar a melhorar o projeto?
+## Development
 
-Batalha naval foi desenvolvido no projeto interação e seu código fonte está disponível neste repositório.  Você poderá cloná-lo para sua maquina local, criar uma nova branch onde poderá fazer as devidas melhorias.
-Assim que fizer o commit de suas alterações, ficaremos felizes em avaliar cuidadosamente, testar e ocasionalmente fazer o merge.
+Would you like to help improve the project?
 
-## Licença
+Battleship was developed in interaction project and its source code is available in this repository. You can clone it to your local machine, create a new branch where you can make the appropriate improvements. As soon as you commit your changes, we will be happy to carefully evaluate, test and occasionally merge them.
+
+![Battleship logic flowchart](https://user-images.githubusercontent.com/89887370/226598409-d3e93841-3bec-40fc-b48e-b82fc37d26ea.png)
+
+## Licence
 
 **Interação 5by5**
 
-## Contato dos desenvolvedores
+## Developers
 
 - [Daniel ](https://github.com/DanielVisicatto)
 - [Luis Guilherme Francisco da Silva](https://github.com/LuisGuilh3rme)
