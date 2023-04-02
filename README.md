@@ -74,7 +74,7 @@ Battleship was developed in interaction project and its source code is available
 
 ## Developers
 
-- [Daniel ](https://github.com/DanielVisicatto)
+- [Daniel Visicatto](https://github.com/DanielVisicatto)
 - [Luis Guilherme Francisco da Silva](https://github.com/LuisGuilh3rme)
 - [Nicolas Antonio Balduino](https://github.com/nicolasbalduino)
 - [Vinicius Picolo](https://github.com/Picolo21)
